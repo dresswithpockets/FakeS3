@@ -13,19 +13,20 @@ using Amazon.Runtime.Internal;
 using Amazon.Runtime.SharedInterfaces;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 
 namespace FakeS3
 {
     public class FakeS3 : AmazonS3Client
     {
-        public static AmazonS3Client CreateFakeClient(IBucketStore bucketStore)
-            => new(null, new AmazonS3Config
+        public static IAmazonS3 CreateFakeClient(IBucketStore bucketStore)
+            => new AmazonS3Client(null, new AmazonS3Config
             {
                 HttpClientFactory = new LiteHttpClientFactory(bucketStore),
                 CacheHttpClient = false
             });
 
-        public static AmazonS3Client CreateFileClient(string root, bool quietMode)
+        public static IAmazonS3 CreateFileClient(string root, bool quietMode)
             => CreateFakeClient(new FileStore(root, quietMode));
 
         //public static AmazonS3Client CreateMemoryClient() => CreateFakeClient(new MemoryStore());
