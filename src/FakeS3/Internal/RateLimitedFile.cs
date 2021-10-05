@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     internal class RateLimitedFile : IStoreStream
     {

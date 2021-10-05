@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     internal sealed class FakeS3HttpMessageHandler : HttpMessageHandler
     {

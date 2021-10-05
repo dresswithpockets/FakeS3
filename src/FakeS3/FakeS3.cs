@@ -14,6 +14,7 @@ using Amazon.Runtime.SharedInterfaces;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
+using FakeS3.Internal;
 
 namespace FakeS3
 {

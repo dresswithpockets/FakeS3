@@ -1,11 +1,7 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Net.Http;
-using System.Security;
-using System.Xml;
+﻿using System.Net.Http;
 using Amazon.Runtime;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     internal sealed class FakeS3HttpClientFactory : HttpClientFactory
     {

@@ -3,11 +3,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
-using Amazon.S3;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
-    public class FakeS3Request
+    internal class FakeS3Request
     {
         public FakeS3Request(HttpRequestMessage request)
         {

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using FakeS3.Internal;
+using Object = FakeS3.Internal.Object;
 
 namespace FakeS3
 {

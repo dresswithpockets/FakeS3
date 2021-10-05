@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Amazon.S3.Model;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     internal static class XmlAdapter
     {

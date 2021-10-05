@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     /// <inheritdoc cref="IObject" />
     internal record Object(

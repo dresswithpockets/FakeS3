@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace FakeS3
+namespace FakeS3.Internal
 {
     internal class Bucket : IBucket
     {
