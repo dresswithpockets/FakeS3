@@ -29,6 +29,7 @@ namespace FakeS3
         public static IAmazonS3 CreateFileClient(string root, bool quietMode)
             => CreateFakeClient(new FileStore(root, quietMode));
 
-        //public static AmazonS3Client CreateMemoryClient() => CreateFakeClient(new MemoryStore());
+        public static IAmazonS3 CreateMemoryClient()
+            => CreateFakeClient(new MemoryStore());
     }
 }
