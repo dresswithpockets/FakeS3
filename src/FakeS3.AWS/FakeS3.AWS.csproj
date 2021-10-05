@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.S3" Version="3.7.3.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\FakeS3\FakeS3.csproj" />
+    </ItemGroup>
+
+</Project>

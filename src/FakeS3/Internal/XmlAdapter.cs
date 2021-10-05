@@ -42,7 +42,7 @@ namespace FakeS3.Internal
             return xmlDoc.OuterXml;
         }
 
-        public static string Bucket(Bucket bucket)
+        public static string Bucket(IBucket bucket)
         {
             // TODO: convert to XDocument
             var xmlDoc = new XmlDocument();

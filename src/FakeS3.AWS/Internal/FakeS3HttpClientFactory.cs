@@ -1,7 +1,8 @@
 ﻿using System.Net.Http;
 using Amazon.Runtime;
+using FakeS3.Internal;
 
-namespace FakeS3.Internal
+namespace FakeS3.AWS.Internal
 {
     internal sealed class FakeS3HttpClientFactory : HttpClientFactory
     {

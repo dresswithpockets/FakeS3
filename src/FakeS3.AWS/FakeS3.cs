@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Amazon;
-using Amazon.Runtime;
-using Amazon.Runtime.Internal;
-using Amazon.Runtime.SharedInterfaces;
-using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.S3.Transfer;
-using FakeS3.Internal;
+﻿using Amazon.S3;
+using FakeS3.AWS.Internal;
 
-namespace FakeS3
+namespace FakeS3.AWS
 {
     public static class FakeS3
     {
