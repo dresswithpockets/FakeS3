@@ -10,7 +10,7 @@ namespace FakeS3
     {
         public const string AmazonDateTimeFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"; 
         
-        public static string Buckets(LiteBucket[] liteBuckets)
+        public static string Buckets(IEnumerable<Bucket> buckets)
         {
             // TODO: convert to XDocument
             var xmlDoc = new XmlDocument();
@@ -25,8 +25,8 @@ namespace FakeS3
             owner.AppendChild(ownerId);
             owner.AppendChild(ownerName);
 
-            var buckets = xmlDoc.CreateElement("Buckets");
-            foreach (var b in liteBuckets)
+            var xmlBuckets = xmlDoc.CreateElement("Buckets");
+            foreach (var b in buckets)
             {
                 var bucket = xmlDoc.CreateElement("Bucket");
                 var bucketName = xmlDoc.CreateElement("Name");
@@ -35,7 +35,7 @@ namespace FakeS3
                 bucketCreationDate.Value = b.Created.ToString(AmazonDateTimeFormatString);
                 bucket.AppendChild(bucketName);
                 bucket.AppendChild(bucketCreationDate);
-                buckets.AppendChild(bucket);
+                xmlBuckets.AppendChild(bucket);
             }
             
             resultNode.AppendChild(owner);
@@ -43,7 +43,7 @@ namespace FakeS3
             return xmlDoc.OuterXml;
         }
 
-        public static string Bucket(LiteBucket liteBucket)
+        public static string Bucket(Bucket bucket)
         {
             // TODO: convert to XDocument
             var xmlDoc = new XmlDocument();
@@ -52,7 +52,7 @@ namespace FakeS3
                 xmlDoc.AppendChild(xmlDoc.CreateElement("ListBucketResult",
                     "http://s3.amazonaws.com/doc/2006-03-01/"))!;
 
-            resultNode.AppendChild(xmlDoc.CreateElement("Name"))!.Value = liteBucket.Name;
+            resultNode.AppendChild(xmlDoc.CreateElement("Name"))!.Value = bucket.Name;
             resultNode.AppendChild(xmlDoc.CreateElement("Prefix"));
             resultNode.AppendChild(xmlDoc.CreateElement("Marker"));
             resultNode.AppendChild(xmlDoc.CreateElement("MaxKeys"))!.Value = "1000";
@@ -60,7 +60,7 @@ namespace FakeS3
             return xmlDoc.OuterXml;
         }
 
-        public static string CopyObjectResult(LiteObject copiedObject)
+        public static string CopyObjectResult(Object copiedObject)
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "UTF-8", null));
             xDoc.Add(new XElement("CopyObjectResult",

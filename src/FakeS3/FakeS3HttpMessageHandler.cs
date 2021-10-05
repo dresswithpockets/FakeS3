@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using Amazon.Runtime;
 
 namespace FakeS3
 {
-    internal sealed class LiteHttpMessageHandler : HttpMessageHandler
+    internal sealed class FakeS3HttpMessageHandler : HttpMessageHandler
     {
         private readonly IBucketStore _bucketStore;
         
-        public LiteHttpMessageHandler(IBucketStore bucketStore) => _bucketStore = bucketStore;
+        public FakeS3HttpMessageHandler(IBucketStore bucketStore) => _bucketStore = bucketStore;
 
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
@@ -215,8 +210,8 @@ namespace FakeS3
                 };
             }
 
-            var liteObject = await _bucketStore.GetObjectAsync(bucket, fakeRequest.Object);
-            if (liteObject == null)
+            var @object = await _bucketStore.GetObjectAsync(bucket, fakeRequest.Object);
+            if (@object == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
@@ -232,7 +227,7 @@ namespace FakeS3
             if (fakeRequest.HttpRequest.Headers.TryGetValues("If-None-Match", out var ifNoneMatchEnumerable))
             {
                 var ifNoneMatch = ifNoneMatchEnumerable.First();
-                if (ifNoneMatch == $"\"{liteObject.Md5}\"" || ifNoneMatch == "*")
+                if (ifNoneMatch == $"\"{@object.Md5}\"" || ifNoneMatch == "*")
                     return new HttpResponseMessage(HttpStatusCode.NotModified);
             }
 
@@ -240,29 +235,29 @@ namespace FakeS3
             {
                 var ifModifiedSince =
                     DateTime.ParseExact(ifModifiedSinceEnumerable.First(), "r", null).ToUniversalTime();
-                if (ifModifiedSince >= liteObject.Modified)
+                if (ifModifiedSince >= @object.Modified)
                     return new HttpResponseMessage(HttpStatusCode.NotModified);
             }
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Headers = {{"Content-Type", liteObject.ContentType}}
+                Headers = {{"Content-Type", @object.ContentType}}
             };
 
-            if (liteObject.ContentEncoding != null)
+            if (@object.ContentEncoding != null)
             {
-                response.Headers.Add("X-Content-Encoding", liteObject.ContentEncoding);
-                response.Headers.Add("Content-Encoding", liteObject.ContentEncoding);
+                response.Headers.Add("X-Content-Encoding", @object.ContentEncoding);
+                response.Headers.Add("Content-Encoding", @object.ContentEncoding);
             }
 
-            response.Headers.Add("Content-Disposition", liteObject.ContentDisposition ?? "attachment");
-            response.Headers.Add("Last-Modified", liteObject.Modified.ToString("r"));
-            response.Headers.Add("Etag", $"\"{liteObject.Md5}\"");
+            response.Headers.Add("Content-Disposition", @object.ContentDisposition ?? "attachment");
+            response.Headers.Add("Last-Modified", @object.Modified.ToString("r"));
+            response.Headers.Add("Etag", $"\"{@object.Md5}\"");
             response.Headers.Add("Accept-Ranges", "bytes");
             response.Headers.Add("Last-Ranges", "bytes");
             response.Headers.Add("Access-Control-Allow_origin", "*");
 
-            foreach (var (key, value) in liteObject.CustomMetadata)
+            foreach (var (key, value) in @object.CustomMetadata)
                 response.Headers.Add($"x-amz-meta-{key}", value);
 
             if (response.Headers.TryGetValues("range", out var rangeEnumerable))
@@ -272,19 +267,19 @@ namespace FakeS3
                 throw new NotImplementedException();
             }
             
-            response.Headers.Add("Content-Length", liteObject.Io.ContentSize.ToString());
+            response.Headers.Add("Content-Length", @object.Io.ContentSize.ToString());
 
-            if (liteObject.CacheControl != null)
-                response.Headers.Add("Cache-Control", liteObject.CacheControl);
+            if (@object.CacheControl != null)
+                response.Headers.Add("Cache-Control", @object.CacheControl);
             
             if (fakeRequest.HttpMethod == HttpMethod.Head)
             {
                 response.Content = new StringContent("");
-                liteObject.Io.Dispose();
+                @object.Io.Dispose();
                 return response;
             }
 
-            response.Content = new StreamContent(liteObject.Io.Stream);
+            response.Content = new StreamContent(@object.Io.Stream);
             return response;
         }
 
@@ -354,17 +349,5 @@ namespace FakeS3
             response.Headers.Add("Access-Control-Expose-Headers", "Authorization, Content-Length");
             return response;
         }
-    }
-    
-    internal sealed class LiteHttpClientFactory : HttpClientFactory
-    {
-        private readonly IBucketStore _bucketStore;
-        
-        public LiteHttpClientFactory(IBucketStore bucketStore) => _bucketStore = bucketStore;
-
-        public override HttpClient CreateHttpClient(IClientConfig clientConfig)
-            => new(new LiteHttpMessageHandler(_bucketStore), true);
-
-        public override bool UseSDKHttpClientCaching(IClientConfig clientConfig) => false;
     }
 }

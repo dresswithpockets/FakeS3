@@ -22,7 +22,7 @@ namespace FakeS3
         public static IAmazonS3 CreateFakeClient(IBucketStore bucketStore)
             => new AmazonS3Client(null, new AmazonS3Config
             {
-                HttpClientFactory = new LiteHttpClientFactory(bucketStore),
+                HttpClientFactory = new FakeS3HttpClientFactory(bucketStore),
                 CacheHttpClient = false
             });
 

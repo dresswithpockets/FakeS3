@@ -51,21 +51,21 @@ namespace FakeS3
     {
         private readonly string _root;
         private readonly bool _quietMode;
-        private readonly Dictionary<string, LiteBucket> _bucketsMap = new();
-        private readonly List<LiteBucket> _buckets = new();
+        private readonly Dictionary<string, Bucket> _bucketsMap = new();
+        private readonly List<Bucket> _buckets = new();
 
-        public IEnumerable<LiteBucket> Buckets => _buckets;
+        public IEnumerable<Bucket> Buckets => _buckets;
 
-        public Task<LiteBucket?> GetBucketAsync(string name)
+        public Task<Bucket?> GetBucketAsync(string name)
             => Task.FromResult(_bucketsMap.TryGetValue(name, out var bucket) ? bucket : null);
 
-        public Task<LiteBucket> CreateBucketAsync(string name)
+        public Task<Bucket> CreateBucketAsync(string name)
         {
             if (_bucketsMap.TryGetValue(name, out var bucket))
                 throw new ArgumentException("A bucket with the same name already exists", nameof(name));
 
             Directory.CreateDirectory(Path.Join(_root, name));
-            bucket = new LiteBucket(name, DateTime.UtcNow, Enumerable.Empty<LiteObject>());
+            bucket = new Bucket(name, DateTime.UtcNow, Enumerable.Empty<Object>());
             _buckets.Add(bucket);
             _bucketsMap.Add(name, bucket);
             return Task.FromResult(bucket);
@@ -83,7 +83,7 @@ namespace FakeS3
             return Task.CompletedTask;
         }
 
-        public async Task<LiteObject?> GetObjectAsync(LiteBucket bucket, string objectName)
+        public async Task<Object?> GetObjectAsync(Bucket bucket, string objectName)
         {
             var objectDir = Path.Join(_root, bucket.Name, objectName);
             if (!Directory.Exists(objectDir))
@@ -112,7 +112,7 @@ namespace FakeS3
             var creationTime = File.GetCreationTimeUtc(contentFile);
             var modifiedTime = File.GetLastWriteTimeUtc(contentFile);
 
-            return new LiteObject(objectName)
+            return new Object(objectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -127,7 +127,7 @@ namespace FakeS3
             };
         }
 
-        public Task<LiteObject?> GetObjectAsync(string bucketName, string objectName)
+        public Task<Object?> GetObjectAsync(string bucketName, string objectName)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
@@ -135,7 +135,7 @@ namespace FakeS3
             return GetObjectAsync(bucket, objectName);
         }
 
-        public async Task<LiteObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public async Task<Object> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             var srcDir = Path.Join(_root, sourceBucketName, sourceObjectName);
             var destDir = Path.Join(_root, destBucketName, destObjectName);
@@ -180,7 +180,7 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
 
-            return new LiteObject(destObjectName)
+            return new Object(destObjectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -193,7 +193,7 @@ namespace FakeS3
             };
         }
 
-        public async Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        public async Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
@@ -223,7 +223,7 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
 
-            var storedObject = new LiteObject(objectName)
+            var storedObject = new Object(objectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -238,7 +238,7 @@ namespace FakeS3
             return storedObject;
         }
 
-        public Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        public Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
@@ -246,7 +246,7 @@ namespace FakeS3
             return StoreObjectAsync(bucket, objectName, data);
         }
 
-        public Task<IEnumerable<string>> DeleteObjectsAsync(LiteBucket bucket, params string[] objectNames)
+        public Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames)
         {
             IEnumerable<string> DoDelete()
             {
@@ -281,7 +281,7 @@ namespace FakeS3
             Directory.CreateDirectory(root);
             foreach (var bucketName in Directory.GetDirectories(root, "*", SearchOption.TopDirectoryOnly))
             {
-                var bucket = new LiteBucket(bucketName, DateTime.UtcNow, Array.Empty<LiteObject>());
+                var bucket = new Bucket(bucketName, DateTime.UtcNow, Array.Empty<Object>());
                 _buckets.Add(bucket);
                 _bucketsMap.Add(bucketName, bucket);
             }

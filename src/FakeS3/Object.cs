@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FakeS3
 {
-    public class LiteObject : IComparable<LiteObject>
+    public class Object : IComparable<Object>
     {
-        public LiteObject(string name) => Name = name;
+        public Object(string name) => Name = name;
 
         public string Name { get; }
 
@@ -29,7 +29,7 @@ namespace FakeS3
 
         public string? CacheControl { get; init; }
 
-        public int CompareTo(LiteObject? other)
+        public int CompareTo(Object? other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;

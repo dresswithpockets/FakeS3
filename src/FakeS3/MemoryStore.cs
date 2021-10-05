@@ -13,13 +13,14 @@ namespace FakeS3
             throw new NotImplementedException();
         }
 
-        public IEnumerable<LiteBucket> Buckets { get; }
-        public Task<LiteBucket?> GetBucketAsync(string name)
+        public IEnumerable<Bucket> Buckets { get; }
+        
+        public Task<Bucket?> GetBucketAsync(string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteBucket> CreateBucketAsync(string name)
+        public Task<Bucket> CreateBucketAsync(string name)
         {
             throw new NotImplementedException();
         }
@@ -29,32 +30,32 @@ namespace FakeS3
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject?> GetObjectAsync(LiteBucket bucket, string objectName)
+        public Task<Object?> GetObjectAsync(Bucket bucket, string objectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject?> GetObjectAsync(string bucketName, string objectName)
+        public Task<Object?> GetObjectAsync(string bucketName, string objectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public Task<Object> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        public Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        public Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<string>> DeleteObjectsAsync(LiteBucket bucket, params string[] objectNames)
+        public Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames)
         {
             throw new NotImplementedException();
         }

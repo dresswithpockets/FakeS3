@@ -5,31 +5,31 @@ using System.Linq;
 
 namespace FakeS3
 {
-    public class LiteBucket
+    public class Bucket
     {
         public string Name { get; }
 
         public DateTime Created { get; }
 
-        public Dictionary<string, LiteObject> Objects { get; }
-        private List<LiteObject> OrderedObjects { get; }
+        public Dictionary<string, Object> Objects { get; }
+        private List<Object> OrderedObjects { get; }
         
         private readonly object objectsLock = new();
         
-        public LiteBucket(string name, DateTime created, IEnumerable<LiteObject> objects)
+        public Bucket(string name, DateTime created, IEnumerable<Object> objects)
         {
             Name = name;
             Created = created;
             Objects = objects.ToDictionary(o => o.Name);
         }
 
-        public LiteObject? Find(string objectName)
+        public Object? Find(string objectName)
         {
             lock (objectsLock)
                 return Objects.TryGetValue(objectName, out var obj) ? obj : null;
         }
 
-        public bool Add(LiteObject obj)
+        public bool Add(Object obj)
         {
             lock (objectsLock)
             {
@@ -40,7 +40,7 @@ namespace FakeS3
             return true;
         }
 
-        public bool Remove(LiteObject obj)
+        public bool Remove(Object obj)
         {
             lock (objectsLock)
             {
@@ -56,13 +56,13 @@ namespace FakeS3
         private MatchSet List(QueryOptions options)
         {
             var markerFound = false;
-            LiteObject? pseudo = null;
+            Object? pseudo = null;
             if (options.Marker != null)
             {
                 markerFound = false;
                 if (!Objects.ContainsKey(options.Marker))
                 {
-                    pseudo = new LiteObject(options.Marker);
+                    pseudo = new Object(options.Marker);
                     lock (objectsLock)
                         OrderedObjects.Add(pseudo);
                 }
@@ -76,11 +76,11 @@ namespace FakeS3
                 prefixOffset = basePrefix.Length;
             }
             
-            IImmutableList<LiteObject> snapshot;
+            IImmutableList<Object> snapshot;
             lock (objectsLock)
                 snapshot = OrderedObjects.ToImmutableList();
             
-            var matches = new List<LiteObject>();
+            var matches = new List<Object>();
             var commonPrefixes = new List<string>();
             var isTruncated = false;
             var count = 0;
