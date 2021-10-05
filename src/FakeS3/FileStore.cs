@@ -54,73 +54,45 @@ namespace FakeS3
         private readonly Dictionary<string, LiteBucket> _bucketsMap = new();
         private readonly List<LiteBucket> _buckets = new();
 
-        // TODO: metadata
-
         public IEnumerable<LiteBucket> Buckets => _buckets;
 
-        public FileStore(string root, bool quietMode)
+        public Task<LiteBucket?> GetBucketAsync(string name)
+            => Task.FromResult(_bucketsMap.TryGetValue(name, out var bucket) ? bucket : null);
+
+        public Task<LiteBucket> CreateBucketAsync(string name)
         {
-            _root = root;
-            _quietMode = quietMode;
-
-            Directory.CreateDirectory(root);
-            foreach (var bucketName in Directory.GetDirectories(root, "*", SearchOption.TopDirectoryOnly))
-            {
-                var bucket = new LiteBucket(bucketName, DateTime.UtcNow, Array.Empty<LiteObject>());
-                _buckets.Add(bucket);
-                _bucketsMap.Add(bucketName, bucket);
-            }
-        }
-
-        public void Dispose()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool TryGetBucket(string name, [MaybeNullWhen(false)] out LiteBucket bucket)
-            => _bucketsMap.TryGetValue(name, out bucket);
-
-        public bool TryCreateBucket(string name, [MaybeNullWhen(false)] out LiteBucket bucket)
-        {
-            if (_bucketsMap.TryGetValue(name, out bucket))
-                return false;
+            if (_bucketsMap.TryGetValue(name, out var bucket))
+                throw new ArgumentException("A bucket with the same name already exists", nameof(name));
 
             Directory.CreateDirectory(Path.Join(_root, name));
             bucket = new LiteBucket(name, DateTime.UtcNow, Enumerable.Empty<LiteObject>());
             _buckets.Add(bucket);
             _bucketsMap.Add(name, bucket);
-            return true;
+            return Task.FromResult(bucket);
         }
 
-        public bool TryDeleteBucket(string name, out bool bucketNotEmpty)
+        public Task DeleteBucketAsync(string name)
         {
-            bucketNotEmpty = false;
-            if (!TryGetBucket(name, out var bucket))
-                return false;
+            if (!_bucketsMap.TryGetValue(name, out var bucket))
+                throw new ArgumentException("A bucket with that name does not exist", nameof(name));
 
             if (bucket.Objects.Count > 0)
-            {
-                bucketNotEmpty = true;
-                return false;
-            }
+                throw new BucketNotEmptyException(name);
 
             Directory.Delete(Path.Join(_root, name), true);
-            return true;
+            return Task.CompletedTask;
         }
 
-        public bool TryGetObject(LiteBucket bucket, string objectName, [MaybeNullWhen(false)] out LiteObject liteObject)
+        public async Task<LiteObject?> GetObjectAsync(LiteBucket bucket, string objectName)
         {
             var objectDir = Path.Join(_root, bucket.Name, objectName);
             if (!Directory.Exists(objectDir))
-            {
-                liteObject = null;
-                return false;
-            }
+                return null;
             
             var contentFile = Path.Join(objectDir, "content");
             var metadataFile = Path.Join(objectDir, "metadata");
 
-            var metadata = JsonDocument.Parse(File.ReadAllText(metadataFile));
+            var metadata = JsonDocument.Parse(await File.ReadAllTextAsync(metadataFile));
 
             var md5 = metadata.RootElement.GetProperty("md5").GetString();
             var contentType = "application/octet-stream";
@@ -140,7 +112,7 @@ namespace FakeS3
             var creationTime = File.GetCreationTimeUtc(contentFile);
             var modifiedTime = File.GetLastWriteTimeUtc(contentFile);
 
-            liteObject = new LiteObject(objectName)
+            return new LiteObject(objectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -153,15 +125,17 @@ namespace FakeS3
                 CacheControl = cacheControl,
                 CustomMetadata = metadataDict
             };
-            return true;
         }
 
-        public bool TryCopyObject(
-            string sourceBucketName,
-            string sourceObjectName,
-            string destBucketName,
-            string destObjectName,
-            [MaybeNullWhen(false)] out LiteObject copiedObject)
+        public Task<LiteObject?> GetObjectAsync(string bucketName, string objectName)
+        {
+            if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
+                throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
+
+            return GetObjectAsync(bucket, objectName);
+        }
+
+        public async Task<LiteObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             var srcDir = Path.Join(_root, sourceBucketName, sourceObjectName);
             var destDir = Path.Join(_root, destBucketName, destObjectName);
@@ -172,12 +146,10 @@ namespace FakeS3
             var destContentFile = Path.Join(destDir, "content");
 
             if (!File.Exists(srcContentFile))
-            {
-                copiedObject = null;
-                return false;
-            }
+                throw new InvalidOperationException(
+                    $"There is no data stored for the object: {sourceBucketName}/{sourceObjectName}");
 
-            var srcMetadata = JsonDocument.Parse(File.ReadAllText(srcMetadataFile));
+            var srcMetadata = JsonDocument.Parse(await File.ReadAllTextAsync(srcMetadataFile));
 
             if (sourceBucketName != destBucketName || sourceObjectName != destObjectName)
             {
@@ -187,11 +159,14 @@ namespace FakeS3
             
             // TODO: metadata directive
 
-            if (!TryGetBucket(sourceBucketName, out var srcBucket))
-                TryCreateBucket(sourceBucketName, out srcBucket);
-
-            if (!TryGetBucket(destBucketName, out var destBucket))
-                TryCreateBucket(destBucketName, out destBucket);
+            try
+            {
+                // create the destination bucket if it isn't already there, eat the exception if it is there
+                await CreateBucketAsync(destBucketName);
+            }
+            catch (ArgumentException)
+            {
+            }
             
             var md5 = srcMetadata.RootElement.GetProperty("md5").GetString();
             var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString();
@@ -205,7 +180,7 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
 
-            copiedObject = new LiteObject(destObjectName)
+            return new LiteObject(destObjectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -216,15 +191,9 @@ namespace FakeS3
                 ContentEncoding = contentEncoding,
                 CacheControl = cacheControl
             };
-
-            return true;
         }
 
-        public bool TryStoreObject(
-            LiteBucket bucket,
-            string objectName,
-            byte[] objectData,
-            [MaybeNullWhen(false)] out LiteObject storedObject)
+        public async Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
@@ -233,10 +202,10 @@ namespace FakeS3
             Directory.CreateDirectory(contentPath);
             Directory.CreateDirectory(metadataPath);
 
-            using var contentFile = File.OpenWrite(contentPath);
-            using var metadataFile = File.OpenWrite(metadataPath);
+            await using var contentFile = File.OpenWrite(contentPath);
+            await using var metadataFile = File.OpenWrite(metadataPath);
 
-            contentFile.Write(objectData);
+            await contentFile.WriteAsync(data);
 
             // TODO: create metadata
 
@@ -254,7 +223,7 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
 
-            storedObject = new LiteObject(objectName)
+            var storedObject = new LiteObject(objectName)
             {
                 Created = creationTime,
                 Modified = modifiedTime,
@@ -266,20 +235,61 @@ namespace FakeS3
                 CacheControl = cacheControl
             };
             bucket.Add(storedObject);
-            return true;
+            return storedObject;
         }
 
-        public IEnumerable<string> TryDeleteObjects(LiteBucket bucket, params string[] objectNames)
+        public Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
-            foreach (var objectName in objectNames)
+            if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
+                throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
+
+            return StoreObjectAsync(bucket, objectName, data);
+        }
+
+        public Task<IEnumerable<string>> DeleteObjectsAsync(LiteBucket bucket, params string[] objectNames)
+        {
+            IEnumerable<string> DoDelete()
             {
-                var dirName = Path.Join(_root, bucket.Name, objectName);
-                var obj = bucket.Find(objectName);
-                if (obj == null) continue;
-                
-                bucket.Remove(obj);
-                yield return dirName;
+                foreach (var objectName in objectNames)
+                {
+                    var dirName = Path.Join(_root, bucket.Name, objectName);
+                    var obj = bucket.Find(objectName);
+                    if (obj == null) continue;
+
+                    bucket.Remove(obj);
+                    Directory.Delete(dirName, true);
+                    yield return dirName;
+                }
             }
+
+            return Task.FromResult(DoDelete());
+        }
+
+        public Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames)
+        {
+            if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
+                throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
+
+            return DeleteObjectsAsync(bucket, objectNames);
+        }
+
+        public FileStore(string root, bool quietMode)
+        {
+            _root = root;
+            _quietMode = quietMode;
+
+            Directory.CreateDirectory(root);
+            foreach (var bucketName in Directory.GetDirectories(root, "*", SearchOption.TopDirectoryOnly))
+            {
+                var bucket = new LiteBucket(bucketName, DateTime.UtcNow, Array.Empty<LiteObject>());
+                _buckets.Add(bucket);
+                _bucketsMap.Add(bucketName, bucket);
+            }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }
