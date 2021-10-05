@@ -19,7 +19,7 @@ namespace FakeS3
 
         Task<LiteObject?> GetObjectAsync(string bucketName, string objectName);
 
-        Task<(LiteObject source, LiteObject dest)> CopyObjectAsync(
+        Task<LiteObject> CopyObjectAsync(
             string sourceBucketName,
             string sourceObjectName,
             string destBucketName,
