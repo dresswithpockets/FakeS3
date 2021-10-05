@@ -84,7 +84,7 @@ namespace FakeS3
             if (fakeRequest.Query["uploadId"] != null)
             {
                 var uploadId = fakeRequest.Query["uploadId"];
-                _bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket);
+                var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
                 /*TODO: _bucketStore.CombineObjectParts(
                     bucket,
                     uploadId,
@@ -106,7 +106,7 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoCreateBucketAsync(FakeS3Request fakeRequest)
         {
-            _bucketStore.TryCreateBucket(fakeRequest.Bucket, out _);
+            await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =
@@ -131,7 +131,8 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoLsBucketAsync(FakeS3Request fakeRequest)
         {
-            if (!_bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket))
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
+            if (bucket == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
                     Headers = {{"Content-Type", "application/xml"}},
@@ -162,14 +163,14 @@ namespace FakeS3
         private async Task<HttpResponseMessage> DoStoreAsync(FakeS3Request fakeRequest)
         {
             // lazily create bucket if it doesnt exist... TODO: return proper error
-            if (!_bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket))
-                _bucketStore.TryCreateBucket(fakeRequest.Bucket, out bucket);
 
-            Debug.Assert(bucket != null);
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket) ??
+                         await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
+
             Debug.Assert(fakeRequest.HttpRequest.Content != null);
             
             var objectData = await fakeRequest.HttpRequest.Content.ReadAsByteArrayAsync();
-            _bucketStore.TryStoreObject(bucket, fakeRequest.Object, objectData, out var storedObject);
+            var storedObject = await _bucketStore.StoreObjectAsync(bucket, fakeRequest.Object, objectData);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =
@@ -184,9 +185,9 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoCopyAsync(FakeS3Request fakeRequest)
         {
-            var copied = _bucketStore.TryCopyObject(fakeRequest.SrcBucket, fakeRequest.SrcObject, fakeRequest.Bucket,
-                fakeRequest.Object, out var liteObject);
-            var result = XmlAdapter.CopyObjectResult(liteObject);
+            var (sourceCopied, destCopied) = await _bucketStore.CopyObjectAsync(fakeRequest.SrcBucket,
+                fakeRequest.SrcObject, fakeRequest.Bucket, fakeRequest.Object);
+            var result = XmlAdapter.CopyObjectResult(destCopied);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =
@@ -200,7 +201,8 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoGetAsync(FakeS3Request fakeRequest)
         {
-            if (!_bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket))
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
+            if (bucket == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
@@ -213,7 +215,8 @@ namespace FakeS3
                 };
             }
 
-            if (!_bucketStore.TryGetObject(bucket, fakeRequest.Object, out var liteObject))
+            var liteObject = await _bucketStore.GetObjectAsync(bucket, fakeRequest.Object);
+            if (liteObject == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
@@ -310,8 +313,8 @@ namespace FakeS3
         private async Task<HttpResponseMessage> DoDeleteObjectAsync(FakeS3Request fakeRequest)
         {
             // TODO: handle if bucket not found or objects not found
-            _bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket);
-            _bucketStore.TryDeleteObjects(bucket!, fakeRequest.Object);
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
+            await _bucketStore.DeleteObjectsAsync(bucket!, fakeRequest.Object);
             return new HttpResponseMessage(HttpStatusCode.NoContent)
             {
                 Content = new StringContent("")
@@ -320,7 +323,7 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoDeleteBucketAsync(FakeS3Request fakeRequest)
         {
-            _bucketStore.TryDeleteBucket(fakeRequest.Bucket, out _);
+            await _bucketStore.DeleteBucketAsync(fakeRequest.Bucket);
             return new HttpResponseMessage(HttpStatusCode.NoContent)
             {
                 Content = new StringContent("")
@@ -330,9 +333,9 @@ namespace FakeS3
         private async Task<HttpResponseMessage> DoDeleteObjectsAsync(FakeS3Request fakeRequest)
         {
             // TODO: handle if bucket not found or objects not found
-            _bucketStore.TryGetBucket(fakeRequest.Bucket, out var bucket);
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
             var body = await fakeRequest.HttpRequest.Content!.ReadAsStringAsync();
-            _bucketStore.TryDeleteObjects(bucket!, XmlAdapter.KeysFromDeleteObjects(body).ToArray());
+            await _bucketStore.DeleteObjectsAsync(bucket!, XmlAdapter.KeysFromDeleteObjects(body).ToArray());
             return new HttpResponseMessage(HttpStatusCode.NoContent)
             {
                 Content = new StringContent("")

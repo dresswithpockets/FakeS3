@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace FakeS3
 {
@@ -8,22 +9,30 @@ namespace FakeS3
     {
         IEnumerable<LiteBucket> Buckets { get; }
 
-        bool TryGetBucket(string name, [MaybeNullWhen(false)] out LiteBucket bucket);
+        Task<LiteBucket?> GetBucketAsync(string name);
 
-        bool TryCreateBucket(string name, [MaybeNullWhen(false)] out LiteBucket bucket);
+        Task<LiteBucket> CreateBucketAsync(string name);
 
-        bool TryDeleteBucket(string name, out bool bucketNotEmpty);
+        Task DeleteBucketAsync(string name);
 
-        bool TryGetObject(LiteBucket bucket, string objectName, [MaybeNullWhen(false)] out LiteObject liteObject);
+        Task<LiteObject?> GetObjectAsync(LiteBucket bucket, string objectName);
 
-        bool TryCopyObject(string sourceBucketName, string sourceObjectName, string destBucketName,
-            string destObjectName, [MaybeNullWhen(false)] out LiteObject copiedObject);
+        Task<LiteObject?> GetObjectAsync(string bucketName, string objectName);
 
-        bool TryStoreObject(LiteBucket bucket, string objectName, byte[] objectData,
-            [MaybeNullWhen(false)] out LiteObject storedObject);
+        Task<(LiteObject source, LiteObject dest)> CopyObjectAsync(
+            string sourceBucketName,
+            string sourceObjectName,
+            string destBucketName,
+            string destObjectName);
 
-        // TODO: combine object parts?
+        Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, Span<byte> data);
 
-        IEnumerable<string> TryDeleteObjects(LiteBucket bucket, params string[] objectNames);
+        Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, Span<byte> data);
+        
+        // TODO: CombineObjectPartsAsync
+
+        Task<IEnumerable<string>> DeleteObjectsAsync(LiteBucket bucket, params string[] objectNames);
+
+        Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames);
     }
 }
