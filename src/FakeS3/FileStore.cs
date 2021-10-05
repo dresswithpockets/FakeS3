@@ -165,10 +165,10 @@ namespace FakeS3
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
+            Directory.CreateDirectory(dirname);
+
             var contentPath = Path.Join(dirname, "content");
             var metadataPath = Path.Join(dirname, "metadata");
-            Directory.CreateDirectory(contentPath);
-            Directory.CreateDirectory(metadataPath);
 
             await using var contentFile = File.OpenWrite(contentPath);
             await using var metadataFile = File.OpenWrite(metadataPath);
