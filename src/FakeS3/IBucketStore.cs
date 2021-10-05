@@ -25,9 +25,9 @@ namespace FakeS3
             string destBucketName,
             string destObjectName);
 
-        Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, Span<byte> data);
+        Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, ReadOnlyMemory<byte> data);
 
-        Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, Span<byte> data);
+        Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data);
         
         // TODO: CombineObjectPartsAsync
 
