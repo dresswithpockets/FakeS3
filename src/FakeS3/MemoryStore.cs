@@ -39,17 +39,17 @@ namespace FakeS3
             throw new NotImplementedException();
         }
 
-        public Task<(LiteObject source, LiteObject dest)> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public Task<LiteObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, Span<byte> data)
+        public Task<LiteObject> StoreObjectAsync(LiteBucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, Span<byte> data)
+        public Task<LiteObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
