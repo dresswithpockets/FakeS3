@@ -113,15 +113,15 @@ namespace FakeS3
             };
         }
 
-        private async Task<HttpResponseMessage> DoListBucketsAsync(FakeS3Request fakeRequest)
+        private Task<HttpResponseMessage> DoListBucketsAsync(FakeS3Request fakeRequest)
         {
             var buckets = _bucketStore.Buckets;
             var result = XmlAdapter.Buckets(buckets.ToArray());
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers = { { "Content-Type", "application/xml" } },
                 Content = new StringContent(result)
-            };
+            });
         }
 
         private async Task<HttpResponseMessage> DoLsBucketAsync(FakeS3Request fakeRequest)
@@ -267,6 +267,8 @@ namespace FakeS3
                 throw new NotImplementedException();
             }
             
+            Debug.Assert(@object.Io != null);
+            
             response.Headers.Add("Content-Length", @object.Io.ContentSize.ToString());
 
             if (@object.CacheControl != null)
@@ -283,18 +285,18 @@ namespace FakeS3
             return response;
         }
 
-        private async Task<HttpResponseMessage> DoGetAclAsync(FakeS3Request fakeRequest)
+        private Task<HttpResponseMessage> DoGetAclAsync(FakeS3Request fakeRequest)
         {
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers = { { "Content-Type", "application/xml" } },
                 Content = new StringContent(XmlAdapter.Acl())
-            };
+            });
         }
 
-        private async Task<HttpResponseMessage> DoSetAclAsync(FakeS3Request fakeRequest)
+        private Task<HttpResponseMessage> DoSetAclAsync(FakeS3Request fakeRequest)
         {
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =
                 {
@@ -302,7 +304,7 @@ namespace FakeS3
                     { "Access-Control-Allow-Origin", "*" }
                 },
                 Content = new StringContent("")
-            };
+            });
         }
 
         private async Task<HttpResponseMessage> DoDeleteObjectAsync(FakeS3Request fakeRequest)
@@ -337,7 +339,7 @@ namespace FakeS3
             };
         }
 
-        private async Task<HttpResponseMessage> DoOptionsAsync(
+        private Task<HttpResponseMessage> DoOptionsAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
@@ -347,7 +349,7 @@ namespace FakeS3
             response.Headers.Add("Access-Control-Allow-Headers",
                 "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition");
             response.Headers.Add("Access-Control-Expose-Headers", "Authorization, Content-Length");
-            return response;
+            return Task.FromResult(response);
         }
     }
 }
