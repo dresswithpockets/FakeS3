@@ -12,10 +12,23 @@ namespace FakeS3
 {
     public interface IStoreStream
     {
+        /// <summary>
+        /// The data stream for the object
+        /// </summary>
         public Stream Stream { get; }
 
+        /// <summary>
+        /// The amount of data in bytes of the stream
+        /// </summary>
         public long ContentSize { get; }
 
+        /// <summary>
+        /// Read data from the stream
+        /// </summary>
+        /// <param name="array">An array to fill with the data from the stream</param>
+        /// <param name="offset">The byte offset to start reading from</param>
+        /// <param name="count">The maximum number of bytes to read</param>
+        /// <returns>The amount of bytes read</returns>
         Task<int> ReadAsync(byte[] array, int offset, int count);
     }
     
@@ -47,6 +60,9 @@ namespace FakeS3
         }
     }
 
+    /// <summary>
+    /// An <see cref="IBucketStore"/> implementation that stores buckets on-disk as files
+    /// </summary>
     public class FileStore : IBucketStore
     {
         private readonly string _root;
@@ -54,11 +70,14 @@ namespace FakeS3
         private readonly Dictionary<string, Bucket> _bucketsMap = new();
         private readonly List<Bucket> _buckets = new();
 
+        /// <inheritdoc />
         public IEnumerable<Bucket> Buckets => _buckets;
 
+        /// <inheritdoc />
         public Task<Bucket?> GetBucketAsync(string name)
             => Task.FromResult(_bucketsMap.TryGetValue(name, out var bucket) ? bucket : null);
 
+        /// <inheritdoc />
         public Task<Bucket> CreateBucketAsync(string name)
         {
             if (_bucketsMap.TryGetValue(name, out var bucket))
@@ -71,6 +90,7 @@ namespace FakeS3
             return Task.FromResult(bucket);
         }
 
+        /// <inheritdoc />
         public Task DeleteBucketAsync(string name)
         {
             if (!_bucketsMap.TryGetValue(name, out var bucket))
@@ -83,6 +103,7 @@ namespace FakeS3
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
         public async Task<Object?> GetObjectAsync(Bucket bucket, string objectName)
         {
             var objectDir = Path.Join(_root, bucket.Name, objectName);
@@ -127,6 +148,7 @@ namespace FakeS3
             };
         }
 
+        /// <inheritdoc />
         public Task<Object?> GetObjectAsync(string bucketName, string objectName)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
@@ -135,6 +157,7 @@ namespace FakeS3
             return GetObjectAsync(bucket, objectName);
         }
 
+        /// <inheritdoc />
         public async Task<Object> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             var srcDir = Path.Join(_root, sourceBucketName, sourceObjectName);
@@ -193,6 +216,7 @@ namespace FakeS3
             };
         }
 
+        /// <inheritdoc />
         public async Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
@@ -238,6 +262,7 @@ namespace FakeS3
             return storedObject;
         }
 
+        /// <inheritdoc />
         public Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
@@ -246,6 +271,7 @@ namespace FakeS3
             return StoreObjectAsync(bucket, objectName, data);
         }
 
+        /// <inheritdoc />
         public Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames)
         {
             IEnumerable<string> DoDelete()
@@ -265,6 +291,7 @@ namespace FakeS3
             return Task.FromResult(DoDelete());
         }
 
+        /// <inheritdoc />
         public Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
@@ -273,6 +300,11 @@ namespace FakeS3
             return DeleteObjectsAsync(bucket, objectNames);
         }
 
+        /// <summary>
+        /// Create a new FileStore
+        /// </summary>
+        /// <param name="root">The root directory to store buckets and objects</param>
+        /// <param name="quietMode">Whether or not to perform some actions quietly/without logging</param>
         public FileStore(string root, bool quietMode)
         {
             _root = root;
@@ -287,6 +319,7 @@ namespace FakeS3
             }
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             GC.SuppressFinalize(this);
