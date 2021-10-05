@@ -87,6 +87,7 @@ namespace FakeS3.Internal
                 SrcObject = string.Join("/", sourceElems[(1 + rootOffset)..]);
                 Type = RequestType.Copy;
                 
+                // ReSharper disable once RedundantJumpStatement
                 goto normalizeEnd;
             }
             else if (HttpMethod == HttpMethod.Post && QueryString != "delete")
@@ -137,6 +138,7 @@ namespace FakeS3.Internal
                         break;
                 }
 
+                // ReSharper disable once RedundantJumpStatement
                 goto normalizeEnd;
             }
 
@@ -147,13 +149,13 @@ namespace FakeS3.Internal
 
         public RequestType Type { get; }
 
-        public string Bucket { get; }
+        public string? Bucket { get; }
 
-        public string Object { get; }
+        public string? Object { get; }
 
-        public string SrcBucket { get; }
+        public string? SrcBucket { get; }
 
-        public string SrcObject { get; }
+        public string? SrcObject { get; }
 
         public HttpRequestMessage HttpRequest { get; }
 
@@ -168,7 +170,7 @@ namespace FakeS3.Internal
         public HttpMethod HttpMethod => HttpRequest.Method;
     }
 
-    public enum RequestType
+    internal enum RequestType
     {
         CreateBucket,
         ListBuckets,
