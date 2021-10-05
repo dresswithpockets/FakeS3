@@ -185,9 +185,9 @@ namespace FakeS3
 
         private async Task<HttpResponseMessage> DoCopyAsync(FakeS3Request fakeRequest)
         {
-            var (sourceCopied, destCopied) = await _bucketStore.CopyObjectAsync(fakeRequest.SrcBucket,
+            var copiedObject = await _bucketStore.CopyObjectAsync(fakeRequest.SrcBucket,
                 fakeRequest.SrcObject, fakeRequest.Bucket, fakeRequest.Object);
-            var result = XmlAdapter.CopyObjectResult(destCopied);
+            var result = XmlAdapter.CopyObjectResult(copiedObject);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =
