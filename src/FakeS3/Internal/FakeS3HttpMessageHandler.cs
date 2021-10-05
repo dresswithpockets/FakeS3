@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FakeS3.Internal
 {
+    [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
     internal sealed class FakeS3HttpMessageHandler : HttpMessageHandler
     {
         private readonly IBucketStore _bucketStore;
@@ -78,6 +80,8 @@ namespace FakeS3.Internal
 
             if (fakeRequest.Query["uploadId"] != null)
             {
+                Debug.Assert(fakeRequest.Bucket != null);
+                
                 var uploadId = fakeRequest.Query["uploadId"];
                 var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
                 /*TODO: _bucketStore.CombineObjectParts(
@@ -101,6 +105,8 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoCreateBucketAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+
             await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
@@ -126,6 +132,8 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoLsBucketAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+
             var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
             if (bucket == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
@@ -157,13 +165,16 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoStoreAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+
             // lazily create bucket if it doesnt exist... TODO: return proper error
 
             var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket) ??
                          await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
 
             Debug.Assert(fakeRequest.HttpRequest.Content != null);
-            
+            Debug.Assert(fakeRequest.Object != null);
+
             var objectData = await fakeRequest.HttpRequest.Content.ReadAsByteArrayAsync();
             var storedObject = await _bucketStore.StoreObjectAsync(bucket, fakeRequest.Object, objectData);
             return new HttpResponseMessage(HttpStatusCode.OK)
@@ -180,6 +191,11 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoCopyAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.SrcBucket != null);
+            Debug.Assert(fakeRequest.SrcObject != null);
+            Debug.Assert(fakeRequest.Bucket != null);
+            Debug.Assert(fakeRequest.Object != null);
+            
             var copiedObject = await _bucketStore.CopyObjectAsync(fakeRequest.SrcBucket,
                 fakeRequest.SrcObject, fakeRequest.Bucket, fakeRequest.Object);
             var result = XmlAdapter.CopyObjectResult(copiedObject);
@@ -196,6 +212,8 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoGetAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+            
             var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
             if (bucket == null)
             {
@@ -209,6 +227,8 @@ namespace FakeS3.Internal
                     Content = new StringContent(XmlAdapter.ErrorNoSuchBucket(fakeRequest.Bucket))
                 };
             }
+            
+            Debug.Assert(fakeRequest.Object != null);
 
             var @object = await _bucketStore.GetObjectAsync(bucket, fakeRequest.Object);
             if (@object == null)
@@ -309,6 +329,9 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoDeleteObjectAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+            Debug.Assert(fakeRequest.Object != null);
+            
             // TODO: handle if bucket not found or objects not found
             var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
             await _bucketStore.DeleteObjectsAsync(bucket!, fakeRequest.Object);
@@ -320,6 +343,8 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoDeleteBucketAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+            
             await _bucketStore.DeleteBucketAsync(fakeRequest.Bucket);
             return new HttpResponseMessage(HttpStatusCode.NoContent)
             {
@@ -329,6 +354,8 @@ namespace FakeS3.Internal
 
         private async Task<HttpResponseMessage> DoDeleteObjectsAsync(FakeS3Request fakeRequest)
         {
+            Debug.Assert(fakeRequest.Bucket != null);
+            
             // TODO: handle if bucket not found or objects not found
             var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
             var body = await fakeRequest.HttpRequest.Content!.ReadAsStringAsync();
