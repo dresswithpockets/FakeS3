@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Transfer;
@@ -34,7 +36,7 @@ namespace FakeS3.Tests
                 BucketName = "testBucket",
                 Key = "testObject",
                 InputStream = inputStream,
-                ContentType = "text/plain"
+                ContentType = "text/plain",
             };
             await transferUtility.UploadAsync(uploadRequest);
 
@@ -48,6 +50,39 @@ namespace FakeS3.Tests
             using var outputReader = new StreamReader(outputStream);
             var output = await outputReader.ReadToEndAsync();
 
+            Assert.Equal(input, output);
+        }
+        
+        [Theory]
+        [MemberData(nameof(Clients))]
+        public async Task ClientCanUploadAndDownloadDataInParts(IAmazonS3 amazonS3)
+        {
+            var input = new byte[64];
+            RandomNumberGenerator.Fill(input);
+            
+            var transferUtility = new TransferUtility(amazonS3);
+            await using var inputStream = new MemoryStream(input);
+                
+            var uploadRequest = new TransferUtilityUploadRequest
+            {
+                BucketName = "testBucket",
+                Key = "testObject",
+                InputStream = inputStream,
+                ContentType = "text/plain",
+                PartSize = 32
+            };
+            await transferUtility.UploadAsync(uploadRequest);
+
+            var downloadRequest = new TransferUtilityOpenStreamRequest
+            {
+                BucketName = "testBucket",
+                Key = "testObject"
+            };
+            var outputStream = await transferUtility.OpenStreamAsync(downloadRequest);
+            var output = new Memory<byte>(new byte[64]);
+            var bytesRead = await outputStream.ReadAsync(output, CancellationToken.None);
+
+            Assert.Equal(input.Length, bytesRead);
             Assert.Equal(input, output);
         }
     }
