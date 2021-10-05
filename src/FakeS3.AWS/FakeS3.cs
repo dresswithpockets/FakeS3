@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using FakeS3.AWS.Internal;
 
 namespace FakeS3.AWS
@@ -18,6 +19,7 @@ namespace FakeS3.AWS
         public static IAmazonS3 CreateClient(IBucketStore bucketStore)
             => new AmazonS3Client(null, new AmazonS3Config
             {
+                ServiceURL = "http://localhost",
                 HttpClientFactory = new FakeS3HttpClientFactory(bucketStore),
                 CacheHttpClient = false
             });
