@@ -5,60 +5,76 @@ using System.Threading.Tasks;
 
 namespace FakeS3
 {
+    /// <summary>
+    /// An <see cref="IBucketStore"/> implementation that stores buckets in-memory
+    /// </summary>
     public class MemoryStore : IBucketStore
     {
+        /// <inheritdoc />
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Bucket> Buckets { get; }
+        /// <inheritdoc />
+        public IEnumerable<IBucket> Buckets => throw new NotImplementedException();
         
-        public Task<Bucket?> GetBucketAsync(string name)
+        /// <inheritdoc />
+        public Task<IBucket?> GetBucketAsync(string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Bucket> CreateBucketAsync(string name)
+        /// <inheritdoc />
+        public Task<IBucket> CreateBucketAsync(string name)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public Task DeleteBucketAsync(string name)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Object?> GetObjectAsync(Bucket bucket, string objectName)
+        /// <inheritdoc />
+        public Task<IObject?> GetObjectAsync(IBucket bucket, string objectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Object?> GetObjectAsync(string bucketName, string objectName)
+        /// <inheritdoc />
+        public Task<IObject?> GetObjectAsync(string bucketName, string objectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Object> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        /// <inheritdoc />
+        public Task<IObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        /// <inheritdoc />
+        public Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        /// <inheritdoc />
+        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames)
+        /// <inheritdoc />
+        public Task<IEnumerable<string>> DeleteObjectsAsync(IBucket bucket, params string[] objectNames)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         public Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames)
         {
             throw new NotImplementedException();

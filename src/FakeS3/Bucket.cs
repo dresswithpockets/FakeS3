@@ -5,33 +5,34 @@ using System.Linq;
 
 namespace FakeS3
 {
-    public class Bucket
+    internal class Bucket : IBucket
     {
         public string Name { get; }
 
         public DateTime Created { get; }
 
-        public Dictionary<string, Object> Objects { get; }
-        private List<Object> OrderedObjects { get; }
+        public Dictionary<string, IObject> Objects { get; }
         
-        private readonly object objectsLock = new();
+        private List<IObject> OrderedObjects { get; } = new();
         
-        public Bucket(string name, DateTime created, IEnumerable<Object> objects)
+        private readonly object _objectsLock = new();
+        
+        public Bucket(string name, DateTime created, IEnumerable<IObject> objects)
         {
             Name = name;
             Created = created;
             Objects = objects.ToDictionary(o => o.Name);
         }
 
-        public Object? Find(string objectName)
+        public IObject? Find(string objectName)
         {
-            lock (objectsLock)
+            lock (_objectsLock)
                 return Objects.TryGetValue(objectName, out var obj) ? obj : null;
         }
 
-        public bool Add(Object obj)
+        public bool Add(IObject obj)
         {
-            lock (objectsLock)
+            lock (_objectsLock)
             {
                 if (!Objects.TryAdd(obj.Name, obj)) return false;
                 OrderedObjects.Add(obj);
@@ -40,9 +41,9 @@ namespace FakeS3
             return true;
         }
 
-        public bool Remove(Object obj)
+        public bool Remove(IObject obj)
         {
-            lock (objectsLock)
+            lock (_objectsLock)
             {
                 if (!Objects.Remove(obj.Name)) return false;
                 OrderedObjects.Remove(obj);
@@ -63,7 +64,7 @@ namespace FakeS3
                 if (!Objects.ContainsKey(options.Marker))
                 {
                     pseudo = new Object(options.Marker);
-                    lock (objectsLock)
+                    lock (_objectsLock)
                         OrderedObjects.Add(pseudo);
                 }
             }
@@ -76,11 +77,11 @@ namespace FakeS3
                 prefixOffset = basePrefix.Length;
             }
             
-            IImmutableList<Object> snapshot;
-            lock (objectsLock)
+            IImmutableList<IObject> snapshot;
+            lock (_objectsLock)
                 snapshot = OrderedObjects.ToImmutableList();
             
-            var matches = new List<Object>();
+            var matches = new List<IObject>();
             var commonPrefixes = new List<string>();
             var isTruncated = false;
             var count = 0;
@@ -129,7 +130,7 @@ namespace FakeS3
 
             if (pseudo != null)
             {
-                lock (objectsLock)
+                lock (_objectsLock)
                     OrderedObjects.Remove(pseudo);
             }
 

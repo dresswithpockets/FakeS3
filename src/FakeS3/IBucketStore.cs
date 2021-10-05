@@ -13,14 +13,14 @@ namespace FakeS3
         /// <summary>
         /// All of the buckets in this store
         /// </summary>
-        IEnumerable<Bucket> Buckets { get; }
+        IEnumerable<IBucket> Buckets { get; }
 
         /// <summary>
         /// Obtains a bucket by name
         /// </summary>
         /// <param name="name">The name of the bucket to search for</param>
         /// <returns>The bucket found. `null` if no bucket is found</returns>
-        Task<Bucket?> GetBucketAsync(string name);
+        Task<IBucket?> GetBucketAsync(string name);
 
         /// <summary>
         /// Create a new bucket with the given name
@@ -28,7 +28,7 @@ namespace FakeS3
         /// <param name="name">Name of the new bucket</param>
         /// <returns>The newly created bucket</returns>
         /// <exception cref="ArgumentException">A bucket with the same <paramref name="name" /> already exists</exception>
-        Task<Bucket> CreateBucketAsync(string name);
+        Task<IBucket> CreateBucketAsync(string name);
 
         /// <summary>
         /// Delete an existing bucket with the given name
@@ -44,7 +44,7 @@ namespace FakeS3
         /// <param name="bucket">The bucket to query for the object within</param>
         /// <param name="objectName">The name of the object to query for</param>
         /// <returns>The object found. `null` if no object is found within the bucket provided.</returns>
-        Task<Object?> GetObjectAsync(Bucket bucket, string objectName);
+        Task<IObject?> GetObjectAsync(IBucket bucket, string objectName);
 
         /// <summary>
         /// Get an existing object with the given name within the bucket specified by the bucket name provided
@@ -53,21 +53,21 @@ namespace FakeS3
         /// <param name="objectName">The name of the object to query for</param>
         /// <returns>The object found. `null` if no object is found within the bucket provided.</returns>
         /// <exception cref="ArgumentException">There is no bucket with the given <paramref name="bucketName" /></exception>
-        Task<Object?> GetObjectAsync(string bucketName, string objectName);
+        Task<IObject?> GetObjectAsync(string bucketName, string objectName);
 
-        Task<Object> CopyObjectAsync(
+        Task<IObject> CopyObjectAsync(
             string sourceBucketName,
             string sourceObjectName,
             string destBucketName,
             string destObjectName);
 
-        Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data);
+        Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data);
 
-        Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data);
+        Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data);
 
         // TODO: CombineObjectPartsAsync
 
-        Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames);
+        Task<IEnumerable<string>> DeleteObjectsAsync(IBucket bucket, params string[] objectNames);
 
         Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames);
     }

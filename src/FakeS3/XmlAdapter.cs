@@ -6,11 +6,11 @@ using Amazon.S3.Model;
 
 namespace FakeS3
 {
-    public static class XmlAdapter
+    internal static class XmlAdapter
     {
         public const string AmazonDateTimeFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"; 
         
-        public static string Buckets(IEnumerable<Bucket> buckets)
+        public static string Buckets(IEnumerable<IBucket> buckets)
         {
             // TODO: convert to XDocument
             var xmlDoc = new XmlDocument();
@@ -60,7 +60,7 @@ namespace FakeS3
             return xmlDoc.OuterXml;
         }
 
-        public static string CopyObjectResult(Object copiedObject)
+        public static string CopyObjectResult(IObject copiedObject)
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "UTF-8", null));
             xDoc.Add(new XElement("CopyObjectResult",

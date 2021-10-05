@@ -8,59 +8,6 @@ using System.Threading.Tasks;
 namespace FakeS3
 {
     /// <summary>
-    /// A wrapper of a Stream of the data associated with a store or object
-    /// </summary>
-    public interface IStoreStream : IDisposable
-    {
-        /// <summary>
-        /// The data stream for the object
-        /// </summary>
-        public Stream Stream { get; }
-
-        /// <summary>
-        /// The amount of data in bytes of the stream
-        /// </summary>
-        public long ContentSize { get; }
-
-        /// <summary>
-        /// Read data from the stream
-        /// </summary>
-        /// <param name="array">An array to fill with the data from the stream</param>
-        /// <param name="offset">The byte offset to start reading from</param>
-        /// <param name="count">The maximum number of bytes to read</param>
-        /// <returns>The amount of bytes read</returns>
-        Task<int> ReadAsync(byte[] array, int offset, int count);
-    }
-    
-    internal class RateLimitedFile : IStoreStream
-    {
-        private readonly FileStream _fileStream;
-
-        public int RateLimit { get; set; }
-
-        public long ContentSize { get; }
-
-        public Stream Stream => _fileStream;
-
-        public RateLimitedFile(string file, int rateLimit)
-        {
-            ContentSize = new FileInfo(file).Length;
-            _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
-            RateLimit = rateLimit;
-        }
-
-        public Task<int> ReadAsync(byte[] array, int offset, int count)
-            => _fileStream.ReadAsync(array, offset, Math.Min(count, RateLimit));
-
-        public void Dispose()
-        {
-            _fileStream.Dispose();
-            
-            GC.SuppressFinalize(this);
-        }
-    }
-
-    /// <summary>
     /// An <see cref="IBucketStore"/> implementation that stores buckets on-disk as files
     /// </summary>
     public class FileStore : IBucketStore
@@ -71,14 +18,14 @@ namespace FakeS3
         private readonly List<Bucket> _buckets = new();
 
         /// <inheritdoc />
-        public IEnumerable<Bucket> Buckets => _buckets;
+        public IEnumerable<IBucket> Buckets => _buckets;
 
         /// <inheritdoc />
-        public Task<Bucket?> GetBucketAsync(string name)
-            => Task.FromResult(_bucketsMap.TryGetValue(name, out var bucket) ? bucket : null);
+        public Task<IBucket?> GetBucketAsync(string name)
+            => Task.FromResult<IBucket?>(_bucketsMap.TryGetValue(name, out var bucket) ? bucket : null);
 
         /// <inheritdoc />
-        public Task<Bucket> CreateBucketAsync(string name)
+        public Task<IBucket> CreateBucketAsync(string name)
         {
             if (_bucketsMap.TryGetValue(name, out var bucket))
                 throw new ArgumentException("A bucket with the same name already exists", nameof(name));
@@ -87,7 +34,7 @@ namespace FakeS3
             bucket = new Bucket(name, DateTime.UtcNow, Enumerable.Empty<Object>());
             _buckets.Add(bucket);
             _bucketsMap.Add(name, bucket);
-            return Task.FromResult(bucket);
+            return Task.FromResult<IBucket>(bucket);
         }
 
         /// <inheritdoc />
@@ -104,7 +51,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public async Task<Object?> GetObjectAsync(Bucket bucket, string objectName)
+        public async Task<IObject?> GetObjectAsync(IBucket bucket, string objectName)
         {
             var objectDir = Path.Join(_root, bucket.Name, objectName);
             if (!Directory.Exists(objectDir))
@@ -150,7 +97,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<Object?> GetObjectAsync(string bucketName, string objectName)
+        public Task<IObject?> GetObjectAsync(string bucketName, string objectName)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
@@ -159,7 +106,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public async Task<Object> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public async Task<IObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
         {
             var srcDir = Path.Join(_root, sourceBucketName, sourceObjectName);
             var destDir = Path.Join(_root, destBucketName, destObjectName);
@@ -212,7 +159,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public async Task<Object> StoreObjectAsync(Bucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        public async Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
@@ -251,7 +198,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<Object> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
@@ -260,7 +207,7 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<string>> DeleteObjectsAsync(Bucket bucket, params string[] objectNames)
+        public Task<IEnumerable<string>> DeleteObjectsAsync(IBucket bucket, params string[] objectNames)
         {
             IEnumerable<string> DoDelete()
             {

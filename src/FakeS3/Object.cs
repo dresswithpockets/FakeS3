@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace FakeS3
 {
-    public record Object(
+    /// <inheritdoc cref="IObject" />
+    internal record Object(
         string Name,
         long Size,
         DateTime Created,
@@ -14,8 +15,9 @@ namespace FakeS3
         string? ContentDisposition,
         string? ContentEncoding,
         IDictionary<string, string> CustomMetadata,
-        string? CacheControl) : IComparable<Object>
+        string? CacheControl) : IComparable<Object>, IObject
     {
+        // ReSharper disable once IntroduceOptionalParameters.Global
         public Object(string marker)
             : this(marker, default, default, default, default!, default, default!, default, default, default!, default)
         {

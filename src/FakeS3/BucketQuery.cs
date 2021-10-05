@@ -1,4 +1,4 @@
 namespace FakeS3
 {
-    public record BucketQuery(Bucket Bucket, QueryOptions Options, MatchSet MatchSet);
+    public record BucketQuery(IBucket Bucket, QueryOptions Options, MatchSet MatchSet);
 }
