@@ -4,6 +4,7 @@
 
 ## Example Usage
 
+On-Disk storage:
 ```c#
 using System;
 using FakeS3;
@@ -14,6 +15,15 @@ Directory.CreateDirectory(tempRoot);
 
 // create IAmazonS3 instance that saves buckets to local folder
 var client = FakeS3.CreateFileClient(tempRoot, false);
+
+// use `client` directly or pass it to something like
+// `Amazon.S3.Transfer.TransferUtility`
+```
+
+In-Memory storage:
+```c#
+// create IAmazonS3 instance that stores buckets in memory
+var client = FakeS3.CreateMemoryClient();
 
 // use `client` directly or pass it to something like
 // `Amazon.S3.Transfer.TransferUtility`
