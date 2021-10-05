@@ -17,7 +17,7 @@ using Amazon.S3.Transfer;
 
 namespace FakeS3
 {
-    public class FakeS3 : AmazonS3Client
+    public static class FakeS3
     {
         public static IAmazonS3 CreateFakeClient(IBucketStore bucketStore)
             => new AmazonS3Client(null, new AmazonS3Config
