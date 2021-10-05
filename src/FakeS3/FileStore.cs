@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Amazon.S3.Transfer;
-using Microsoft.Win32.SafeHandles;
 
 namespace FakeS3
 {
@@ -118,12 +115,14 @@ namespace FakeS3
 
             var metadata = JsonDocument.Parse(await File.ReadAllTextAsync(metadataFile));
 
-            var md5 = metadata.RootElement.GetProperty("md5").GetString();
+            var md5 = metadata.RootElement.GetProperty("md5").GetString() ??
+                      throw new InvalidOperationException("Metadata must include an md5 property");
             var contentType = "application/octet-stream";
             
             // TODO: accept content-type from parameters
             if (metadata.RootElement.TryGetProperty("content-type", out var property))
-                contentType = property.GetString();
+                contentType = property.GetString() ??
+                              throw new InvalidOperationException("Metadata 'content-type' must be a string");
             
             // TODO: accept content-disposition from parameters
             var contentDisposition = metadata.RootElement.GetProperty("content-disposition").GetString();
@@ -193,9 +192,12 @@ namespace FakeS3
             catch (ArgumentException)
             {
             }
-            
-            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString();
-            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString();
+
+            // TODO: accept content-type from parameters?
+            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString() ??
+                      throw new InvalidOperationException("Metadata must include an md5 property");
+            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString() ??
+                              throw new InvalidOperationException("Metadata must include a content-type property");
 
             // TODO: accept content-disposition from parameters
             var contentDisposition = srcMetadata.RootElement.GetProperty("content-disposition").GetString();
@@ -238,8 +240,10 @@ namespace FakeS3
 
             JsonDocument srcMetadata = default!;
             
-            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString();
-            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString();
+            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString() ??
+                      throw new InvalidOperationException("Metadata must include an md5 property");
+            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString() ??
+                              throw new InvalidOperationException("Metadata must include a content-type property");
 
             // TODO: accept content-disposition from parameters
             var contentDisposition = srcMetadata.RootElement.GetProperty("content-disposition").GetString();
