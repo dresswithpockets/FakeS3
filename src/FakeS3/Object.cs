@@ -17,7 +17,7 @@ namespace FakeS3
 
         public string Md5 { get; init; }
 
-        public RateLimitedFile Io { get; init; }
+        public IStoreStream Io { get; init; }
 
         public string ContentType { get; init; }
 

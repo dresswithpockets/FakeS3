@@ -10,7 +10,10 @@ using Microsoft.Win32.SafeHandles;
 
 namespace FakeS3
 {
-    public interface IStoreStream
+    /// <summary>
+    /// A wrapper of a Stream of the data associated with a store or object
+    /// </summary>
+    public interface IStoreStream : IDisposable
     {
         /// <summary>
         /// The data stream for the object
@@ -32,7 +35,7 @@ namespace FakeS3
         Task<int> ReadAsync(byte[] array, int offset, int count);
     }
     
-    public class RateLimitedFile : IStoreStream, IDisposable
+    internal class RateLimitedFile : IStoreStream
     {
         private readonly FileStream _fileStream;
 
