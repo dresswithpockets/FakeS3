@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FakeS3.Internal;
@@ -85,17 +86,17 @@ namespace FakeS3
             var modifiedTime = File.GetLastWriteTimeUtc(contentFile);
             
             // TODO rate limit?
-            return new Object(objectName,
-                size,
-                creationTime,
-                modifiedTime,
-                md5,
-                new RateLimitedFile(contentFile, int.MaxValue),
-                contentType,
-                contentDisposition,
-                contentEncoding,
-                metadataDict,
-                cacheControl);
+            return new Object(objectName, new RateLimitedFile(contentFile, int.MaxValue),
+                new ObjectMetadata(md5,
+                    contentType,
+                    contentDisposition,
+                    cacheControl,
+                    contentEncoding,
+                    size,
+                    creationTime,
+                    modifiedTime,
+                    new Dictionary<string, string>(),
+                    metadataDict));
         }
 
         /// <inheritdoc />
@@ -156,8 +157,17 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
 
-            return new Object(destObjectName, size, creationTime, modifiedTime, md5, null, contentType,
-                contentDisposition, contentEncoding, new Dictionary<string, string>(), cacheControl);
+            return new Object(destObjectName, null,
+                new ObjectMetadata(md5,
+                    contentType,
+                    contentDisposition,
+                    cacheControl,
+                    contentEncoding,
+                    size,
+                    creationTime,
+                    modifiedTime,
+                    new Dictionary<string, string>(),
+                    new Dictionary<string, string>()));
         }
 
         /// <inheritdoc />
@@ -193,8 +203,17 @@ namespace FakeS3
             var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
             var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
             
-            var storedObject = new Object(objectName, size, creationTime, modifiedTime, md5, null, contentType,
-                contentDisposition, contentEncoding, new Dictionary<string, string>(), cacheControl);
+            var storedObject =new Object(objectName, null,
+                new ObjectMetadata(md5,
+                    contentType,
+                    contentDisposition,
+                    cacheControl,
+                    contentEncoding,
+                    size,
+                    creationTime,
+                    modifiedTime,
+                    new Dictionary<string, string>(),
+                    new Dictionary<string, string>()));
             bucket.Add(storedObject);
             return storedObject;
         }

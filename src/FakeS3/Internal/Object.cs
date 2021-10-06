@@ -6,24 +6,16 @@ namespace FakeS3.Internal
     /// <inheritdoc cref="IObject" />
     internal record Object(
         string Name,
-        long Size,
-        DateTime Created,
-        DateTime Modified,
-        string Md5,
         IStoreStream? Io,
-        string ContentType,
-        string? ContentDisposition,
-        string? ContentEncoding,
-        IDictionary<string, string> CustomMetadata,
-        string? CacheControl) : IComparable<Object>, IObject
+        ObjectMetadata Metadata) : IObject
     {
         // ReSharper disable once IntroduceOptionalParameters.Global
         public Object(string marker)
-            : this(marker, default, default, default, default!, default, default!, default, default, default!, default)
+            : this(marker, default, default!)
         {
         }
 
-        public int CompareTo(Object? other)
+        public int CompareTo(IObject? other)
         {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;

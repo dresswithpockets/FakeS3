@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -55,7 +57,7 @@ namespace FakeS3.Internal
             {
                 var bytes = new byte[16];
                 RandomNumberGenerator.Fill(bytes);
-                var uploadId = BitConverter.ToString(bytes).Replace("-", "");
+                var uploadId = bytes.ToHexString();
                 var result = @$"<?xml version=""1.0"" encoding=""UTF-8""?>
 <InitializeMultipartUploadResult>
   <Bucket>{fakeRequest.Bucket}</Bucket>
@@ -183,7 +185,7 @@ namespace FakeS3.Internal
                 {
                     { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" },
-                    { "ETag", $"\"{storedObject?.Md5}\"" }
+                    { "ETag", $"\"{storedObject.Metadata.Md5}\"" }
                 },
                 Content = new StringContent("")
             };
@@ -247,7 +249,7 @@ namespace FakeS3.Internal
             if (fakeRequest.HttpRequest.Headers.TryGetValues("If-None-Match", out var ifNoneMatchEnumerable))
             {
                 var ifNoneMatch = ifNoneMatchEnumerable.First();
-                if (ifNoneMatch == $"\"{@object.Md5}\"" || ifNoneMatch == "*")
+                if (ifNoneMatch == $"\"{@object.Metadata.Md5}\"" || ifNoneMatch == "*")
                     return new HttpResponseMessage(HttpStatusCode.NotModified);
             }
 
@@ -255,29 +257,29 @@ namespace FakeS3.Internal
             {
                 var ifModifiedSince =
                     DateTime.ParseExact(ifModifiedSinceEnumerable.First(), "r", null).ToUniversalTime();
-                if (ifModifiedSince >= @object.Modified)
+                if (ifModifiedSince >= @object.Metadata.Modified)
                     return new HttpResponseMessage(HttpStatusCode.NotModified);
             }
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Headers = {{"Content-Type", @object.ContentType}}
+                Headers = {{"Content-Type", @object.Metadata.ContentType}}
             };
 
-            if (@object.ContentEncoding != null)
+            if (@object.Metadata.ContentEncoding != null)
             {
-                response.Headers.Add("X-Content-Encoding", @object.ContentEncoding);
-                response.Headers.Add("Content-Encoding", @object.ContentEncoding);
+                response.Headers.Add("X-Content-Encoding", @object.Metadata.ContentEncoding);
+                response.Headers.Add("Content-Encoding", @object.Metadata.ContentEncoding);
             }
 
-            response.Headers.Add("Content-Disposition", @object.ContentDisposition ?? "attachment");
-            response.Headers.Add("Last-Modified", @object.Modified.ToString("r"));
-            response.Headers.Add("Etag", $"\"{@object.Md5}\"");
+            response.Headers.Add("Content-Disposition", @object.Metadata.ContentDisposition ?? "attachment");
+            response.Headers.Add("Last-Modified", @object.Metadata.Modified.ToString("r"));
+            response.Headers.Add("Etag", $"\"{@object.Metadata.Md5}\"");
             response.Headers.Add("Accept-Ranges", "bytes");
             response.Headers.Add("Last-Ranges", "bytes");
             response.Headers.Add("Access-Control-Allow_origin", "*");
 
-            foreach (var (key, value) in @object.CustomMetadata)
+            foreach (var (key, value) in @object.Metadata.CustomMetadata)
                 response.Headers.Add($"x-amz-meta-{key}", value);
 
             if (response.Headers.TryGetValues("range", out var rangeEnumerable))
@@ -291,8 +293,8 @@ namespace FakeS3.Internal
             
             response.Headers.Add("Content-Length", @object.Io.ContentSize.ToString());
 
-            if (@object.CacheControl != null)
-                response.Headers.Add("Cache-Control", @object.CacheControl);
+            if (@object.Metadata.CacheControl != null)
+                response.Headers.Add("Cache-Control", @object.Metadata.CacheControl);
             
             if (fakeRequest.HttpMethod == HttpMethod.Head)
             {
@@ -377,6 +379,56 @@ namespace FakeS3.Internal
                 "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition");
             response.Headers.Add("Access-Control-Expose-Headers", "Authorization, Content-Length");
             return Task.FromResult(response);
+        }
+        
+        private static async Task<ObjectMetadata> CreateMetadataFromRequestAsync(FakeS3Request request)
+        {
+            Debug.Assert(request.HttpRequest.Content != null);
+
+            var contentStream = await request.HttpRequest.Content.ReadAsStreamAsync();
+            using var md5Hasher = MD5.Create();
+            var contentHash = await md5Hasher.ComputeHashAsync(contentStream);
+
+            var contentType = request.HttpRequest.Headers.GetValues("Content-Type").First();
+            var contentDisposition = request.HttpRequest.Headers.TryGetValues("Content-Disposition", out var values)
+                ? values.First()
+                : null;
+            var cacheControl = request.HttpRequest.Headers.TryGetValues("Cache-Control", out values)
+                ? values.First()
+                : null;
+            var contentEncoding = request.HttpRequest.Headers.GetValues("Content-Encoding").First();
+
+            var amazonMetadata = new Dictionary<string, string>();
+            var customMetadata = new Dictionary<string, string>();
+
+            foreach (var (key, headerValues) in request.HttpRequest.Headers)
+            {
+                var match = Regex.Match(key, @"^x-amz-([^-]+)-(.*)$");
+                if (!match.Success) continue;
+
+                var value = string.Join(", ", headerValues);
+
+                if (match.Groups.Count == 3 && match.Groups[1].Value == "meta")
+                {
+                    customMetadata.Add(match.Groups[2].Value, value);
+                    continue;
+                }
+                
+                amazonMetadata.Add(key.Replace("a-amz-", ""), value);
+            }
+
+            return new ObjectMetadata(
+                contentHash.ToHexString(),
+                contentType,
+                contentDisposition,
+                cacheControl,
+                contentEncoding,
+                contentStream.Length,
+                DateTime.UtcNow, // TODO: Get Created Time From File/Memory?
+                DateTime.UtcNow, // TODO: Get Modified Time From File/Memory?
+                amazonMetadata,
+                customMetadata
+            );
         }
     }
 }

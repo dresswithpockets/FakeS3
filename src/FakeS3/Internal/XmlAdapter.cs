@@ -63,8 +63,8 @@ namespace FakeS3.Internal
         {
             var xDoc = new XDocument(new XDeclaration("1.0", "UTF-8", null));
             xDoc.Add(new XElement("CopyObjectResult",
-                new XElement("LastModified", copiedObject.Modified.ToString(AmazonDateTimeFormatString)),
-                new XElement("ETag", $"\"{copiedObject.Md5}\"")
+                new XElement("LastModified", copiedObject.Metadata.Modified.ToString(AmazonDateTimeFormatString)),
+                new XElement("ETag", $"\"{copiedObject.Metadata.Md5}\"")
                 )
             );
             return xDoc.ToString();
@@ -148,9 +148,9 @@ namespace FakeS3.Internal
                     bucketQuery.MatchSet.Matches.Select(match =>
                         new XElement("Contents",
                             new XElement("Key", match.Name),
-                            new XElement("LastModified", match.Modified.ToString(AmazonDateTimeFormatString)),
-                            new XElement("ETag", $"\"{match.Md5}\""),
-                            new XElement("Size", match.Size),
+                            new XElement("LastModified", match.Metadata.Modified.ToString(AmazonDateTimeFormatString)),
+                            new XElement("ETag", $"\"{match.Metadata.Md5}\""),
+                            new XElement("Size", match.Metadata.Size),
                             new XElement("StorageClass", "STANDARD"),
                             new XElement("Owner",
                                 new XElement("ID", "abc"),
