@@ -61,9 +61,17 @@ namespace FakeS3
             string destBucketName,
             string destObjectName);
 
-        Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data);
+        Task<IObject> StoreObjectAsync(
+            IBucket bucket,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata);
 
-        Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data);
+        Task<IObject> StoreObjectAsync(
+            string bucketName,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata);
 
         // TODO: CombineObjectPartsAsync
 

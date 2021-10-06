@@ -19,7 +19,7 @@ namespace FakeS3
 
         /// <inheritdoc />
         public IEnumerable<IBucket> Buckets => throw new NotImplementedException();
-        
+
         /// <inheritdoc />
         public Task<IBucket?> GetBucketAsync(string name)
         {
@@ -51,19 +51,31 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<IObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public Task<IObject> CopyObjectAsync(
+            string sourceBucketName,
+            string sourceObjectName,
+            string destBucketName,
+            string destObjectName)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        public Task<IObject> StoreObjectAsync(
+            IBucket bucket,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata)
         {
             throw new NotImplementedException();
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        public Task<IObject> StoreObjectAsync(
+            string bucketName,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata)
         {
             throw new NotImplementedException();
         }

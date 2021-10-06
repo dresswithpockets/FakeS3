@@ -178,7 +178,8 @@ namespace FakeS3.Internal
             Debug.Assert(fakeRequest.Object != null);
 
             var objectData = await fakeRequest.HttpRequest.Content.ReadAsByteArrayAsync();
-            var storedObject = await _bucketStore.StoreObjectAsync(bucket, fakeRequest.Object, objectData);
+            var storedObject = await _bucketStore.StoreObjectAsync(bucket, fakeRequest.Object, objectData,
+                await CreateMetadataFromRequestAsync(fakeRequest));
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Headers =

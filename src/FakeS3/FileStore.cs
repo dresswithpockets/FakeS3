@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FakeS3.Internal;
@@ -63,40 +64,14 @@ namespace FakeS3
             var contentFile = Path.Join(objectDir, "content");
             var metadataFile = Path.Join(objectDir, "metadata");
 
-            var metadata = JsonDocument.Parse(await File.ReadAllTextAsync(metadataFile));
-
-            var md5 = metadata.RootElement.GetProperty("md5").GetString() ??
-                      throw new InvalidOperationException("Metadata must include an md5 property");
-            var contentType = "application/octet-stream";
-            
-            // TODO: accept content-type from parameters
-            if (metadata.RootElement.TryGetProperty("content-type", out var property))
-                contentType = property.GetString() ??
-                              throw new InvalidOperationException("Metadata 'content-type' must be a string");
-            
-            // TODO: accept content-disposition from parameters
-            var contentDisposition = metadata.RootElement.GetProperty("content-disposition").GetString();
-            var contentEncoding = metadata.RootElement.GetProperty("content-encoding").GetString();
-            var size = metadata.RootElement.GetProperty("size").GetInt32();
-            var cacheControl = metadata.RootElement.GetProperty("cache-control").GetString();
-            var metadataDict = metadata.RootElement.GetProperty("custom-metadata").EnumerateObject()
-                .ToDictionary(prop => prop.Name, prop => prop.Value.GetString() ?? "");
+            var metadata = JsonSerializer.Deserialize<ObjectMetadata>(await File.ReadAllTextAsync(metadataFile));
 
             var creationTime = File.GetCreationTimeUtc(contentFile);
             var modifiedTime = File.GetLastWriteTimeUtc(contentFile);
             
             // TODO rate limit?
             return new Object(objectName, new RateLimitedFile(contentFile, int.MaxValue),
-                new ObjectMetadata(md5,
-                    contentType,
-                    contentDisposition,
-                    cacheControl,
-                    contentEncoding,
-                    size,
-                    creationTime,
-                    modifiedTime,
-                    new Dictionary<string, string>(),
-                    metadataDict));
+                metadata with {Created = creationTime, Modified = modifiedTime});
         }
 
         /// <inheritdoc />
@@ -123,8 +98,6 @@ namespace FakeS3
                 throw new InvalidOperationException(
                     $"There is no data stored for the object: {sourceBucketName}/{sourceObjectName}");
 
-            var srcMetadata = JsonDocument.Parse(await File.ReadAllTextAsync(srcMetadataFile));
-
             if (sourceBucketName != destBucketName || sourceObjectName != destObjectName)
             {
                 File.Copy(srcMetadataFile, destMetadataFile);
@@ -142,36 +115,15 @@ namespace FakeS3
             {
             }
 
-            // TODO: accept content-type from parameters?
-            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString() ??
-                      throw new InvalidOperationException("Metadata must include an md5 property");
-            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString() ??
-                              throw new InvalidOperationException("Metadata must include a content-type property");
+            var metadata =
+                JsonSerializer.Deserialize<ObjectMetadata>(await File.ReadAllTextAsync(destMetadataFile,
+                    Encoding.UTF8));
 
-            // TODO: accept content-disposition from parameters
-            var contentDisposition = srcMetadata.RootElement.GetProperty("content-disposition").GetString();
-            var contentEncoding = srcMetadata.RootElement.GetProperty("content-encoding").GetString();
-            var size = srcMetadata.RootElement.GetProperty("size").GetInt32();
-            var cacheControl = srcMetadata.RootElement.GetProperty("cache-control").GetString();
-
-            var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
-            var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
-
-            return new Object(destObjectName, null,
-                new ObjectMetadata(md5,
-                    contentType,
-                    contentDisposition,
-                    cacheControl,
-                    contentEncoding,
-                    size,
-                    creationTime,
-                    modifiedTime,
-                    new Dictionary<string, string>(),
-                    new Dictionary<string, string>()));
+            return new Object(destObjectName, null, metadata);
         }
 
         /// <inheritdoc />
-        public async Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data)
+        public async Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data, ObjectMetadata metadata)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
@@ -184,47 +136,20 @@ namespace FakeS3
             await using var metadataFile = File.OpenWrite(metadataPath);
 
             await contentFile.WriteAsync(data);
+            await metadataFile.WriteAsync(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(metadata)));
 
-            // TODO: create metadata
-
-            JsonDocument srcMetadata = default!;
-            
-            var md5 = srcMetadata.RootElement.GetProperty("md5").GetString() ??
-                      throw new InvalidOperationException("Metadata must include an md5 property");
-            var contentType = srcMetadata.RootElement.GetProperty("content-type").GetString() ??
-                              throw new InvalidOperationException("Metadata must include a content-type property");
-
-            // TODO: accept content-disposition from parameters
-            var contentDisposition = srcMetadata.RootElement.GetProperty("content-disposition").GetString();
-            var contentEncoding = srcMetadata.RootElement.GetProperty("content-encoding").GetString();
-            var size = srcMetadata.RootElement.GetProperty("size").GetInt32();
-            var cacheControl = srcMetadata.RootElement.GetProperty("cache-control").GetString();
-
-            var creationTime = srcMetadata.RootElement.GetProperty("created").GetDateTime();
-            var modifiedTime = srcMetadata.RootElement.GetProperty("modified").GetDateTime();
-            
-            var storedObject =new Object(objectName, null,
-                new ObjectMetadata(md5,
-                    contentType,
-                    contentDisposition,
-                    cacheControl,
-                    contentEncoding,
-                    size,
-                    creationTime,
-                    modifiedTime,
-                    new Dictionary<string, string>(),
-                    new Dictionary<string, string>()));
+            var storedObject = new Object(objectName, null, metadata);
             bucket.Add(storedObject);
             return storedObject;
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data)
+        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data, ObjectMetadata metadata)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
 
-            return StoreObjectAsync(bucket, objectName, data);
+            return StoreObjectAsync(bucket, objectName, data, metadata);
         }
 
         /// <inheritdoc />
