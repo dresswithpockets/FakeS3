@@ -83,7 +83,9 @@ namespace FakeS3.Tests
             var bytesRead = await outputStream.ReadAsync(output, CancellationToken.None);
 
             Assert.Equal(input.Length, bytesRead);
-            Assert.Equal(input, output);
+
+            for (var i = 0; i < input.Length; i++)
+                Assert.Equal(input[i], output.Span[i]);
         }
     }
 }
