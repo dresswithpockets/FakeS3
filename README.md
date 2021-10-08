@@ -7,7 +7,7 @@
 On-Disk storage:
 ```c#
 using System;
-using FakeS3;
+using FakeS3.AWS;
 
 // create a temporary folder to use as the on-disk s3 root
 var tempRoot = Path.Join(Path.GetTempPath(), Path.GetRandomFileName());
@@ -20,7 +20,7 @@ var client = FakeS3.CreateFileClient(tempRoot, false);
 // `Amazon.S3.Transfer.TransferUtility`
 ```
 
-In-Memory storage:
+In-Memory storage (Note: in-memory provider is still WIP):
 ```c#
 // create IAmazonS3 instance that stores buckets in memory
 var client = FakeS3.CreateMemoryClient();
