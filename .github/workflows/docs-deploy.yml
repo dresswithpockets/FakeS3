@@ -1,0 +1,36 @@
+name: Deploy Docs to Github Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: mono:6.12.0.107
+
+    environment: docs_deploy
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: install docfx and dependencies
+        run: |
+          apt update -y
+          apt upgrade -y
+          apt install -y wget unzip git
+          mkdir -p /tmp/docfx
+          wget https://github.com/dotnet/docfx/releases/download/v2.58/docfx.zip -O /tmp/docfx.zip
+          unzip /tmp/docfx.zip -d /tmp/docfx
+      - name: Build Docs via docfx
+        run: |
+          cd docfx
+          /usr/bin/mono /tmp/docfx/docfx.exe
+          cd ../
+      
+      - name: Push Changes
+        uses: maxheld83/ghpages@v0.3.0
+        env:
+          BUILD_DIR: docfx/_site
+          GH_PAT: ${{ secrets.GH_PAT }}
