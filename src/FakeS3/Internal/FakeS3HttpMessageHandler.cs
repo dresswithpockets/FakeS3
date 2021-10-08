@@ -6,10 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Xml.Linq;
 
 namespace FakeS3.Internal
 {
@@ -27,25 +31,80 @@ namespace FakeS3.Internal
             if (request.Method == HttpMethod.Options)
                 return DoOptionsAsync(request, cancellationToken);
             var fakeRequest = new FakeS3Request(request);
+
+            if (fakeRequest.Query["uploadId"] == null)
+                return fakeRequest.Type switch
+                {
+                    RequestType.CreateBucket => DoCreateBucketAsync(fakeRequest),
+                    RequestType.ListBuckets => DoListBucketsAsync(fakeRequest),
+                    RequestType.LsBucket => DoLsBucketAsync(fakeRequest),
+                    RequestType.Head => DoHeadAsync(fakeRequest),
+                    RequestType.Store => DoStoreAsync(fakeRequest),
+                    RequestType.Copy => DoCopyAsync(fakeRequest),
+                    RequestType.Get => DoGetAsync(fakeRequest),
+                    RequestType.GetAcl => DoGetAclAsync(fakeRequest),
+                    RequestType.SetAcl => DoSetAclAsync(fakeRequest),
+                    RequestType.DeleteObject => DoDeleteObjectAsync(fakeRequest),
+                    RequestType.DeleteBucket => DoDeleteBucketAsync(fakeRequest),
+                    RequestType.DeleteObjects => DoDeleteObjectsAsync(fakeRequest),
+                    RequestType.Post => DoPostAsync(fakeRequest),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+
+            return fakeRequest.Type == RequestType.Copy
+                ? DoMultipartCopyAsync(fakeRequest)
+                : DoMultipartPutAsync(fakeRequest);
+        }
+
+        private async Task<HttpResponseMessage> DoMultipartPutAsync(FakeS3Request fakeRequest)
+        {
+            Debug.Assert(fakeRequest.Bucket != null);
+            Debug.Assert(fakeRequest.HttpRequest.Content != null);
             
-            // TODO: Multipart PUT
-            
-            return fakeRequest.Type switch
+            var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket) ??
+                         await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
+
+            var data = await fakeRequest.HttpRequest.Content.ReadAsByteArrayAsync();
+
+            var partNumber = fakeRequest.Query["partNumber"];
+            var uploadId = fakeRequest.Query["uploadId"];
+            var partName = $"{uploadId}_{fakeRequest.Object}_part{partNumber}";
+
+            var realObject = await _bucketStore.StoreObjectAsync(bucket, partName, data,
+                await CreateMetadataFromRequestAsync(fakeRequest));
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
             {
-                RequestType.CreateBucket => DoCreateBucketAsync(fakeRequest),
-                RequestType.ListBuckets => DoListBucketsAsync(fakeRequest),
-                RequestType.LsBucket => DoLsBucketAsync(fakeRequest),
-                RequestType.Head => DoHeadAsync(fakeRequest),
-                RequestType.Store => DoStoreAsync(fakeRequest),
-                RequestType.Copy => DoCopyAsync(fakeRequest),
-                RequestType.Get => DoGetAsync(fakeRequest),
-                RequestType.GetAcl => DoGetAclAsync(fakeRequest),
-                RequestType.SetAcl => DoSetAclAsync(fakeRequest),
-                RequestType.DeleteObject => DoDeleteObjectAsync(fakeRequest),
-                RequestType.DeleteBucket => DoDeleteBucketAsync(fakeRequest),
-                RequestType.DeleteObjects => DoDeleteObjectsAsync(fakeRequest),
-                RequestType.Post => DoPostAsync(fakeRequest),
-                _ => throw new ArgumentOutOfRangeException()
+                Headers =
+                {
+                    { "ETag", $"\"{realObject.Metadata.Md5}\"" },
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
+                    { "Access-Control-Expose-Headers", "ETag" },
+                },
+                Content = new StringContent("")
+            };
+        }
+
+        private async Task<HttpResponseMessage> DoMultipartCopyAsync(FakeS3Request fakeRequest)
+        {
+            var partNumber = fakeRequest.Query["partNumber"];
+            var uploadId = fakeRequest.Query["uploadId"];
+            var partName = $"{uploadId}_{fakeRequest.Object}_part{partNumber}";
+
+            var realObject = await _bucketStore.CopyObjectAsync(fakeRequest.SrcBucket, fakeRequest.SrcObject,
+                fakeRequest.Bucket, partName);
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Headers =
+                {
+                    { "Content-Type", "text/xml" },
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
+                    { "Access-Control-Expose-Headers", "ETag" },
+                },
+                Content = new StringContent(XmlAdapter.CopyObjectResult(realObject))
             };
         }
 
@@ -72,37 +131,129 @@ namespace FakeS3.Internal
                     {
                         { "Content-Type", "text/xml" },
                         { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
+                        { "Access-Control-Expose-Headers", "ETag" },
+                    },
+                    Content = new StringContent(result),
+                };
+            }
+            
+            if (fakeRequest.Query["uploadId"] != null)
+            {
+                Debug.Assert(fakeRequest.Bucket != null);
+                Debug.Assert(fakeRequest.Object != null);
+                
+                var uploadId = fakeRequest.Query["uploadId"];
+                var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
+                var realObject = await _bucketStore.CombineObjectPartsAsync(
+                    bucket,
+                    uploadId,
+                    fakeRequest.Object,
+                    await ParseCompleteMultipartUploadAsync(fakeRequest),
+                    await CreateMetadataFromRequestAsync(fakeRequest));
+
+                var result = XmlAdapter.CompleteMultipartResult(realObject);
+                
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Headers =
+                    {
+                        { "Content-Type", "text/xml" },
                         { "Access-Control-Allow-Origin", "*" },
-                        { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
+                        { "Access-Control-Expose-Headers", "ETag" },
                     },
                     Content = new StringContent(result),
                 };
             }
 
-
-            if (fakeRequest.Query["uploadId"] != null)
-            {
-                Debug.Assert(fakeRequest.Bucket != null);
-                
-                var uploadId = fakeRequest.Query["uploadId"];
-                var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket);
-                /*TODO: _bucketStore.CombineObjectParts(
-                    bucket,
-                    uploadId,
-                    fakeRequest.Object,
-                    ParseCompleteMultipartUpload(fakeRequest),
-                    fakeRequest);*/
-                throw new NotImplementedException();
-            }
-
             if (fakeRequest.HttpRequest.Headers.TryGetValues("Content-Type", out var values) &&
                 Regex.IsMatch(values.First(), @"^multipart\/form-data; boundary=(.+)"))
             {
-                // TODO: multipart form data/boundary
-                throw new NotImplementedException();
+                Debug.Assert(fakeRequest.HttpRequest.Content != null);
+                Debug.Assert(fakeRequest.Bucket != null);
+                
+                var successActionRedirect = fakeRequest.Query["success_action_redirect"];
+                var successActionStatus = fakeRequest.Query["success_action_status"];
+
+                var body = await fakeRequest.HttpRequest.Content.ReadAsStringAsync();
+                
+                var filename = "default";
+                var filenameMatch = Regex.Match(body, "filename=\"(.*)\"");
+                if (filenameMatch.Groups.Count > 1)
+                    filename = filenameMatch.Groups[1].Value;
+
+                key = key.Replace("${filename}", filename);
+
+                var bucket = await _bucketStore.GetBucketAsync(fakeRequest.Bucket) ??
+                             await _bucketStore.CreateBucketAsync(fakeRequest.Bucket);
+                
+                var objectData = await fakeRequest.HttpRequest.Content.ReadAsByteArrayAsync();
+                var realObject = await _bucketStore.StoreObjectAsync(bucket, key, objectData,
+                    await CreateMetadataFromRequestAsync(fakeRequest));
+
+                var response = new HttpResponseMessage()
+                {
+                    Headers =
+                    {
+                        { "Content-Type", "text/xml" },
+                        { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
+                        { "Access-Control-Expose-Headers", "ETag" },
+                        { "ETag", $"\"{realObject.Metadata.Md5}\"" }
+                    }
+                };
+
+                if (successActionRedirect == null)
+                {
+                    response.StatusCode =
+                        successActionStatus != null && int.TryParse(successActionStatus, out var successStatus)
+                            ? (HttpStatusCode) successStatus
+                            : HttpStatusCode.NoContent;
+
+                    response.Content = new StringContent(
+                        new XDocument(
+                            new XDeclaration("1.0", "UTF-8", null),
+                            new XElement("PostResponse",
+                                new XElement("Location", $"http://{fakeRequest.Bucket}.localhost:{1234}/{key}"),
+                                new XElement("Bucket", fakeRequest.Bucket),
+                                new XElement("Key", key),
+                                new XElement("ETag", $"\"{realObject.Metadata.Md5}\"")
+                                )
+                            ).ToString());
+                    
+                    return response;
+                }
+
+                var objectParams = $"bucket={fakeRequest.Bucket}&key={key}";
+                
+                var locationUri = new UriBuilder(new Uri(successActionRedirect));
+                var originalLocationParams = HttpUtility.UrlDecode(locationUri.Query);
+                locationUri.Query = HttpUtility.UrlEncode($"{originalLocationParams}&{objectParams}");
+                
+                response.StatusCode = HttpStatusCode.RedirectMethod;
+                response.Content = new StringContent("");
+                response.Headers.Add("Location", locationUri.Uri.AbsoluteUri);
+                return response;
             }
 
             return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+
+        private async Task<IEnumerable<PartInfo>> ParseCompleteMultipartUploadAsync(FakeS3Request fakeRequest)
+        {
+            Debug.Assert(fakeRequest.HttpRequest.Content != null);
+
+            var xml = await fakeRequest.HttpRequest.Content.ReadAsStringAsync();
+            var doc = XDocument.Parse(xml);
+            return doc
+                .Elements("CompleteMultipartUpload/Part")
+                .Select(p => 
+                    new PartInfo(
+                        int.Parse(p.Element("PartNumber")!.Value),
+                        p.Element("ETag")!.Value
+                        )
+                );
         }
 
         private async Task<HttpResponseMessage> DoCreateBucketAsync(FakeS3Request fakeRequest)
@@ -184,11 +335,10 @@ namespace FakeS3.Internal
             {
                 Headers =
                 {
-                    { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" },
                     { "ETag", $"\"{storedObject.Metadata.Md5}\"" }
                 },
-                Content = new StringContent("")
+                Content = new StringContent("", null, "text/xml")
             };
         }
 
@@ -262,20 +412,9 @@ namespace FakeS3.Internal
                     return new HttpResponseMessage(HttpStatusCode.NotModified);
             }
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Headers = {{"Content-Type", @object.Metadata.ContentType}}
-            };
-
-            if (@object.Metadata.ContentEncoding != null)
-            {
-                response.Headers.Add("X-Content-Encoding", @object.Metadata.ContentEncoding);
-                response.Headers.Add("Content-Encoding", @object.Metadata.ContentEncoding);
-            }
-
-            response.Headers.Add("Content-Disposition", @object.Metadata.ContentDisposition ?? "attachment");
-            response.Headers.Add("Last-Modified", @object.Metadata.Modified.ToString("r"));
-            response.Headers.Add("Etag", $"\"{@object.Metadata.Md5}\"");
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            
+            response.Headers.ETag = new EntityTagHeaderValue($"\"{@object.Metadata.Md5}\"");
             response.Headers.Add("Accept-Ranges", "bytes");
             response.Headers.Add("Last-Ranges", "bytes");
             response.Headers.Add("Access-Control-Allow_origin", "*");
@@ -291,8 +430,6 @@ namespace FakeS3.Internal
             }
             
             Debug.Assert(@object.Io != null);
-            
-            response.Headers.Add("Content-Length", @object.Io.ContentSize.ToString());
 
             if (@object.Metadata.CacheControl != null)
                 response.Headers.Add("Cache-Control", @object.Metadata.CacheControl);
@@ -304,7 +441,23 @@ namespace FakeS3.Internal
                 return response;
             }
 
-            response.Content = new StreamContent(@object.Io.Stream);
+            response.Content = new StreamContent(@object.Io.Stream)
+            {
+                Headers =
+                {
+                    {"Content-Type", @object.Metadata.ContentType},
+                    {"Content-Length", @object.Io.ContentSize.ToString()},
+                    {"Content-Disposition", @object.Metadata.ContentDisposition ?? "attachment"},
+                    {"Last-Modified", @object.Metadata.Modified.ToString("r")}
+                }
+            };
+
+            if (@object.Metadata.ContentEncoding != null)
+            {
+                response.Headers.Add("X-Content-Encoding", @object.Metadata.ContentEncoding);
+                response.Content.Headers.Add("Content-Encoding", @object.Metadata.ContentEncoding);
+            }
+            
             return response;
         }
 
@@ -390,14 +543,16 @@ namespace FakeS3.Internal
             using var md5Hasher = MD5.Create();
             var contentHash = await md5Hasher.ComputeHashAsync(contentStream);
 
-            var contentType = request.HttpRequest.Headers.GetValues("Content-Type").First();
-            var contentDisposition = request.HttpRequest.Headers.TryGetValues("Content-Disposition", out var values)
+            var contentType = request.HttpRequest.Content.Headers.GetValues("Content-Type").First();
+            var contentDisposition = request.HttpRequest.Content.Headers.TryGetValues("Content-Disposition", out var values)
                 ? values.First()
                 : null;
             var cacheControl = request.HttpRequest.Headers.TryGetValues("Cache-Control", out values)
                 ? values.First()
                 : null;
-            var contentEncoding = request.HttpRequest.Headers.GetValues("Content-Encoding").First();
+            var contentEncoding = request.HttpRequest.Content.Headers.TryGetValues("Content-Encoding", out values)
+                ? values.First()
+                : null;
 
             var amazonMetadata = new Dictionary<string, string>();
             var customMetadata = new Dictionary<string, string>();

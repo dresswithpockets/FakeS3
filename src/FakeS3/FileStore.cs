@@ -181,6 +181,48 @@ namespace FakeS3
             return DeleteObjectsAsync(bucket, objectNames);
         }
 
+        /// <inheritdoc />
+        public async Task<IObject> CombineObjectPartsAsync(
+            IBucket bucket,
+            string uploadId,
+            string objectName,
+            IEnumerable<PartInfo> parts,
+            ObjectMetadata metadata)
+        {
+            var uploadPath = Path.Join(_root, bucket.Name);
+            var basePath = Path.Join(uploadPath, $"{uploadId}_{objectName}");
+
+            var completeFile = new MemoryStream();
+            var partPaths = new List<string>();
+
+            foreach (var (number, etag) in parts)
+            {
+                var partPath = $"{basePath}_part{number}";
+                var contentPath = Path.Join(partPath, "content");
+                
+                await using var contentStream = File.OpenRead(contentPath);
+                var chunk = new byte[contentStream.Length];
+                await contentStream.ReadAsync(chunk);
+                
+                using var md5Hasher = MD5.Create();
+                var contentHash = md5Hasher.ComputeHash(chunk).ToHexString();
+
+                if (contentHash != etag)
+                    throw new InvalidOperationException("Invalid file chunk");
+
+                await completeFile.WriteAsync(chunk);
+                partPaths.Add(partPath);
+            }
+
+            var realObject = await StoreObjectAsync(bucket, objectName, completeFile.ToArray(), metadata);
+            
+            // clean up parts
+            foreach (var path in partPaths)
+                Directory.Delete(path);
+
+            return realObject;
+        }
+
         /// <summary>
         /// Create a new FileStore
         /// </summary>
@@ -206,4 +248,6 @@ namespace FakeS3
             GC.SuppressFinalize(this);
         }
     }
+
+    public record PartInfo(int Number, string ETag);
 }

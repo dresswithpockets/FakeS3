@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FakeS3.Internal;
 
 namespace FakeS3
 {
@@ -78,5 +79,12 @@ namespace FakeS3
         Task<IEnumerable<string>> DeleteObjectsAsync(IBucket bucket, params string[] objectNames);
 
         Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames);
+
+        Task<IObject> CombineObjectPartsAsync(
+            IBucket bucket,
+            string uploadId,
+            string objectName,
+            IEnumerable<PartInfo> parts,
+            ObjectMetadata metadata);
     }
 }

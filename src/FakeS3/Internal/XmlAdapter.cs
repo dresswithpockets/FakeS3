@@ -165,5 +165,16 @@ namespace FakeS3.Internal
                     )
                 )
             ).ToString();
+
+        public static string CompleteMultipartResult(IObject realObject)
+            => new XDocument(
+                new XDeclaration("1.0", "UTF-8", null),
+                new XElement("CompleteMultipartUploadResult",
+                    new XElement("Location"), // TODO: implement
+                    new XElement("Bucket"), // TODO: implement
+                    new XElement("Key", realObject.Name),
+                    new XElement("ETag", $"\"{realObject.Metadata.Md5}\"")
+                    )
+                ).ToString();
     }
 }
