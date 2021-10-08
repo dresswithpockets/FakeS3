@@ -1,0 +1,821 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FileStore
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FileStore
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="FakeS3.FileStore">
+  
+  
+  <h1 id="FakeS3_FileStore" data-uid="FakeS3.FileStore" class="text-break">Class FileStore
+  </h1>
+  <div class="markdown level0 summary"><p>An <a class="xref" href="FakeS3.IBucketStore.html">IBucketStore</a> implementation that stores buckets on-disk as files</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FileStore</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="FakeS3.IBucketStore.html">IBucketStore</a></div>
+    <div><span class="xref">IDisposable</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="FakeS3.html">FakeS3</a></h6>
+  <h6><strong>Assembly</strong>: FakeS3.dll</h6>
+  <h5 id="FakeS3_FileStore_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FileStore : object, IBucketStore, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="FakeS3_FileStore__ctor_" data-uid="FakeS3.FileStore.#ctor*"></a>
+  <h4 id="FakeS3_FileStore__ctor_System_String_System_Boolean_" data-uid="FakeS3.FileStore.#ctor(System.String,System.Boolean)">FileStore(String, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Create a new FileStore</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FileStore(string root, bool quietMode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">root</span></td>
+        <td><p>The root directory to store buckets and objects</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">quietMode</span></td>
+        <td><p>Whether or not to perform some actions quietly/without logging</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="FakeS3_FileStore_Buckets_" data-uid="FakeS3.FileStore.Buckets*"></a>
+  <h4 id="FakeS3_FileStore_Buckets" data-uid="FakeS3.FileStore.Buckets">Buckets</h4>
+  <div class="markdown level1 summary"><p>All of the buckets in this store</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;IBucket&gt; Buckets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="FakeS3.IBucket.html">IBucket</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="FakeS3_FileStore_CombineObjectPartsAsync_" data-uid="FakeS3.FileStore.CombineObjectPartsAsync*"></a>
+  <h4 id="FakeS3_FileStore_CombineObjectPartsAsync_FakeS3_IBucket_System_String_System_String_IEnumerable_PartInfo__ObjectMetadata_" data-uid="FakeS3.FileStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)">CombineObjectPartsAsync(IBucket, String, String, IEnumerable&lt;PartInfo&gt;, ObjectMetadata)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;IObject&gt; CombineObjectPartsAsync(IBucket bucket, string uploadId, string objectName, IEnumerable&lt;PartInfo&gt; parts, ObjectMetadata metadata)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FakeS3.IBucket.html">IBucket</a></td>
+        <td><span class="parametername">bucket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">uploadId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">objectName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">PartInfo</span>&gt;</td>
+        <td><span class="parametername">parts</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ObjectMetadata</span></td>
+        <td><span class="parametername">metadata</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_CopyObjectAsync_" data-uid="FakeS3.FileStore.CopyObjectAsync*"></a>
+  <h4 id="FakeS3_FileStore_CopyObjectAsync_System_String_System_String_System_String_System_String_" data-uid="FakeS3.FileStore.CopyObjectAsync(System.String,System.String,System.String,System.String)">CopyObjectAsync(String, String, String, String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;IObject&gt; CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">sourceBucketName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">sourceObjectName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">destBucketName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">destObjectName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_CreateBucketAsync_" data-uid="FakeS3.FileStore.CreateBucketAsync*"></a>
+  <h4 id="FakeS3_FileStore_CreateBucketAsync_System_String_" data-uid="FakeS3.FileStore.CreateBucketAsync(System.String)">CreateBucketAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Create a new bucket with the given name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IBucket&gt; CreateBucketAsync(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Name of the new bucket</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IBucket.html">IBucket</a>&gt;</td>
+        <td><p>The newly created bucket</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_DeleteBucketAsync_" data-uid="FakeS3.FileStore.DeleteBucketAsync*"></a>
+  <h4 id="FakeS3_FileStore_DeleteBucketAsync_System_String_" data-uid="FakeS3.FileStore.DeleteBucketAsync(System.String)">DeleteBucketAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Delete an existing bucket with the given name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task DeleteBucketAsync(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Name of the bucket to delete</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FakeS3.BucketNotEmptyException.html">BucketNotEmptyException</a></td>
+        <td><p>The bucket is not empty and cannot be deleted</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_DeleteObjectsAsync_" data-uid="FakeS3.FileStore.DeleteObjectsAsync*"></a>
+  <h4 id="FakeS3_FileStore_DeleteObjectsAsync_FakeS3_IBucket_System_String___" data-uid="FakeS3.FileStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])">DeleteObjectsAsync(IBucket, String[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IEnumerable&lt;string&gt;&gt; DeleteObjectsAsync(IBucket bucket, params string[] objectNames)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FakeS3.IBucket.html">IBucket</a></td>
+        <td><span class="parametername">bucket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">objectNames</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_DeleteObjectsAsync_" data-uid="FakeS3.FileStore.DeleteObjectsAsync*"></a>
+  <h4 id="FakeS3_FileStore_DeleteObjectsAsync_System_String_System_String___" data-uid="FakeS3.FileStore.DeleteObjectsAsync(System.String,System.String[])">DeleteObjectsAsync(String, String[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IEnumerable&lt;string&gt;&gt; DeleteObjectsAsync(string bucketName, params string[] objectNames)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bucketName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">objectNames</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<span class="xref">IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_Dispose_" data-uid="FakeS3.FileStore.Dispose*"></a>
+  <h4 id="FakeS3_FileStore_Dispose" data-uid="FakeS3.FileStore.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  
+  
+  <a id="FakeS3_FileStore_GetBucketAsync_" data-uid="FakeS3.FileStore.GetBucketAsync*"></a>
+  <h4 id="FakeS3_FileStore_GetBucketAsync_System_String_" data-uid="FakeS3.FileStore.GetBucketAsync(System.String)">GetBucketAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Obtains a bucket by name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IBucket&gt; GetBucketAsync(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the bucket to search for</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IBucket.html">IBucket</a>&gt;</td>
+        <td><p>The bucket found. <code>null</code> if no bucket is found</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_GetObjectAsync_" data-uid="FakeS3.FileStore.GetObjectAsync*"></a>
+  <h4 id="FakeS3_FileStore_GetObjectAsync_FakeS3_IBucket_System_String_" data-uid="FakeS3.FileStore.GetObjectAsync(FakeS3.IBucket,System.String)">GetObjectAsync(IBucket, String)</h4>
+  <div class="markdown level1 summary"><p>Get an existing object with the given name within the bucket provided</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;IObject&gt; GetObjectAsync(IBucket bucket, string objectName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FakeS3.IBucket.html">IBucket</a></td>
+        <td><span class="parametername">bucket</span></td>
+        <td><p>The bucket to query for the object within</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">objectName</span></td>
+        <td><p>The name of the object to query for</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td><p>The object found. <code>null</code> if no object is found within the bucket provided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_GetObjectAsync_" data-uid="FakeS3.FileStore.GetObjectAsync*"></a>
+  <h4 id="FakeS3_FileStore_GetObjectAsync_System_String_System_String_" data-uid="FakeS3.FileStore.GetObjectAsync(System.String,System.String)">GetObjectAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Get an existing object with the given name within the bucket specified by the bucket name provided</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IObject&gt; GetObjectAsync(string bucketName, string objectName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bucketName</span></td>
+        <td><p>The name of the bucket to query for the object within</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">objectName</span></td>
+        <td><p>The name of the object to query for</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td><p>The object found. <code>null</code> if no object is found within the bucket provided.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_StoreObjectAsync_" data-uid="FakeS3.FileStore.StoreObjectAsync*"></a>
+  <h4 id="FakeS3_FileStore_StoreObjectAsync_FakeS3_IBucket_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_" data-uid="FakeS3.FileStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)">StoreObjectAsync(IBucket, String, ReadOnlyMemory&lt;Byte&gt;, ObjectMetadata)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public async Task&lt;IObject&gt; StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory&lt;byte&gt; data, ObjectMetadata metadata)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="FakeS3.IBucket.html">IBucket</a></td>
+        <td><span class="parametername">bucket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">objectName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ObjectMetadata</span></td>
+        <td><span class="parametername">metadata</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FakeS3_FileStore_StoreObjectAsync_" data-uid="FakeS3.FileStore.StoreObjectAsync*"></a>
+  <h4 id="FakeS3_FileStore_StoreObjectAsync_System_String_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_" data-uid="FakeS3.FileStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)">StoreObjectAsync(String, String, ReadOnlyMemory&lt;Byte&gt;, ObjectMetadata)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;IObject&gt; StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory&lt;byte&gt; data, ObjectMetadata metadata)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bucketName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">objectName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ReadOnlyMemory</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">ObjectMetadata</span></td>
+        <td><span class="parametername">metadata</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span>&lt;<a class="xref" href="FakeS3.IObject.html">IObject</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="FakeS3.IBucketStore.html">IBucketStore</a>
+  </div>
+  <div>
+      <span class="xref">IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <div class="toggle-mode">
+                <div class="icon">
+                  <i aria-hidden="true">☀</i>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-style">
+                  <span class="slider round"></span>
+                </label>
+                <div class="icon">
+                  <i aria-hidden="true">☾</i>
+                </div>
+              </div>
+          
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <h5>In This Article</h5>
+              <div></div>
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <div class="pull-left">
+              
+              <span>Generated by <strong>DocFX</strong></span>
+            </div>
+            <div class="toggle-mode pull-right visible-sm visible-xs">
+              <div class="icon">
+                <i aria-hidden="true">☀</i>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="switch-style-m">
+                <span class="slider round"></span>
+              </label>
+              <div class="icon">
+                <i aria-hidden="true">☾</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript" src="../styles/toggle-theme.js"></script>
+      </footer>    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

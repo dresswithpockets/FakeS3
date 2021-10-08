@@ -1,0 +1,862 @@
+### YamlMime:XRefMap
+sorted: true
+references:
+- uid: FakeS3
+  name: FakeS3
+  href: api/FakeS3.html
+  commentId: N:FakeS3
+  fullName: FakeS3
+  nameWithType: FakeS3
+- uid: FakeS3.AWS
+  name: FakeS3.AWS
+  href: api/FakeS3.AWS.html
+  commentId: N:FakeS3.AWS
+  fullName: FakeS3.AWS
+  nameWithType: FakeS3.AWS
+- uid: FakeS3.AWS.FakeS3
+  name: FakeS3
+  href: api/FakeS3.AWS.FakeS3.html
+  commentId: T:FakeS3.AWS.FakeS3
+  fullName: FakeS3.AWS.FakeS3
+  nameWithType: FakeS3
+- uid: FakeS3.AWS.FakeS3.CreateClient(FakeS3.IBucketStore)
+  name: CreateClient(IBucketStore)
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateClient_FakeS3_IBucketStore_
+  commentId: M:FakeS3.AWS.FakeS3.CreateClient(FakeS3.IBucketStore)
+  fullName: FakeS3.AWS.FakeS3.CreateClient(FakeS3.IBucketStore)
+  nameWithType: FakeS3.CreateClient(IBucketStore)
+- uid: FakeS3.AWS.FakeS3.CreateClient*
+  name: CreateClient
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateClient_
+  commentId: Overload:FakeS3.AWS.FakeS3.CreateClient
+  isSpec: "True"
+  fullName: FakeS3.AWS.FakeS3.CreateClient
+  nameWithType: FakeS3.CreateClient
+- uid: FakeS3.AWS.FakeS3.CreateFileClient(System.String,System.Boolean)
+  name: CreateFileClient(String, Boolean)
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateFileClient_System_String_System_Boolean_
+  commentId: M:FakeS3.AWS.FakeS3.CreateFileClient(System.String,System.Boolean)
+  fullName: FakeS3.AWS.FakeS3.CreateFileClient(System.String, System.Boolean)
+  nameWithType: FakeS3.CreateFileClient(String, Boolean)
+- uid: FakeS3.AWS.FakeS3.CreateFileClient*
+  name: CreateFileClient
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateFileClient_
+  commentId: Overload:FakeS3.AWS.FakeS3.CreateFileClient
+  isSpec: "True"
+  fullName: FakeS3.AWS.FakeS3.CreateFileClient
+  nameWithType: FakeS3.CreateFileClient
+- uid: FakeS3.AWS.FakeS3.CreateMemoryClient
+  name: CreateMemoryClient()
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateMemoryClient
+  commentId: M:FakeS3.AWS.FakeS3.CreateMemoryClient
+  fullName: FakeS3.AWS.FakeS3.CreateMemoryClient()
+  nameWithType: FakeS3.CreateMemoryClient()
+- uid: FakeS3.AWS.FakeS3.CreateMemoryClient*
+  name: CreateMemoryClient
+  href: api/FakeS3.AWS.FakeS3.html#FakeS3_AWS_FakeS3_CreateMemoryClient_
+  commentId: Overload:FakeS3.AWS.FakeS3.CreateMemoryClient
+  isSpec: "True"
+  fullName: FakeS3.AWS.FakeS3.CreateMemoryClient
+  nameWithType: FakeS3.CreateMemoryClient
+- uid: FakeS3.BucketNotEmptyException
+  name: BucketNotEmptyException
+  href: api/FakeS3.BucketNotEmptyException.html
+  commentId: T:FakeS3.BucketNotEmptyException
+  fullName: FakeS3.BucketNotEmptyException
+  nameWithType: BucketNotEmptyException
+- uid: FakeS3.BucketNotEmptyException.#ctor(System.String)
+  name: BucketNotEmptyException(String)
+  href: api/FakeS3.BucketNotEmptyException.html#FakeS3_BucketNotEmptyException__ctor_System_String_
+  commentId: M:FakeS3.BucketNotEmptyException.#ctor(System.String)
+  fullName: FakeS3.BucketNotEmptyException.BucketNotEmptyException(System.String)
+  nameWithType: BucketNotEmptyException.BucketNotEmptyException(String)
+- uid: FakeS3.BucketNotEmptyException.#ctor*
+  name: BucketNotEmptyException
+  href: api/FakeS3.BucketNotEmptyException.html#FakeS3_BucketNotEmptyException__ctor_
+  commentId: Overload:FakeS3.BucketNotEmptyException.#ctor
+  isSpec: "True"
+  fullName: FakeS3.BucketNotEmptyException.BucketNotEmptyException
+  nameWithType: BucketNotEmptyException.BucketNotEmptyException
+- uid: FakeS3.BucketNotEmptyException.Bucket
+  name: Bucket
+  href: api/FakeS3.BucketNotEmptyException.html#FakeS3_BucketNotEmptyException_Bucket
+  commentId: P:FakeS3.BucketNotEmptyException.Bucket
+  fullName: FakeS3.BucketNotEmptyException.Bucket
+  nameWithType: BucketNotEmptyException.Bucket
+- uid: FakeS3.BucketNotEmptyException.Bucket*
+  name: Bucket
+  href: api/FakeS3.BucketNotEmptyException.html#FakeS3_BucketNotEmptyException_Bucket_
+  commentId: Overload:FakeS3.BucketNotEmptyException.Bucket
+  isSpec: "True"
+  fullName: FakeS3.BucketNotEmptyException.Bucket
+  nameWithType: BucketNotEmptyException.Bucket
+- uid: FakeS3.BytesArrayToHexStringExtension
+  name: BytesArrayToHexStringExtension
+  href: api/FakeS3.BytesArrayToHexStringExtension.html
+  commentId: T:FakeS3.BytesArrayToHexStringExtension
+  fullName: FakeS3.BytesArrayToHexStringExtension
+  nameWithType: BytesArrayToHexStringExtension
+- uid: FakeS3.BytesArrayToHexStringExtension.ToHexString(IEnumerable{System.Byte})
+  name: ToHexString(IEnumerable<Byte>)
+  href: api/FakeS3.BytesArrayToHexStringExtension.html#FakeS3_BytesArrayToHexStringExtension_ToHexString_IEnumerable_System_Byte__
+  commentId: M:FakeS3.BytesArrayToHexStringExtension.ToHexString(IEnumerable{System.Byte})
+  name.vb: ToHexString(IEnumerable(Of Byte))
+  fullName: FakeS3.BytesArrayToHexStringExtension.ToHexString(IEnumerable<System.Byte>)
+  fullName.vb: FakeS3.BytesArrayToHexStringExtension.ToHexString(IEnumerable(Of System.Byte))
+  nameWithType: BytesArrayToHexStringExtension.ToHexString(IEnumerable<Byte>)
+  nameWithType.vb: BytesArrayToHexStringExtension.ToHexString(IEnumerable(Of Byte))
+- uid: FakeS3.BytesArrayToHexStringExtension.ToHexString*
+  name: ToHexString
+  href: api/FakeS3.BytesArrayToHexStringExtension.html#FakeS3_BytesArrayToHexStringExtension_ToHexString_
+  commentId: Overload:FakeS3.BytesArrayToHexStringExtension.ToHexString
+  isSpec: "True"
+  fullName: FakeS3.BytesArrayToHexStringExtension.ToHexString
+  nameWithType: BytesArrayToHexStringExtension.ToHexString
+- uid: FakeS3.FileStore
+  name: FileStore
+  href: api/FakeS3.FileStore.html
+  commentId: T:FakeS3.FileStore
+  fullName: FakeS3.FileStore
+  nameWithType: FileStore
+- uid: FakeS3.FileStore.#ctor(System.String,System.Boolean)
+  name: FileStore(String, Boolean)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore__ctor_System_String_System_Boolean_
+  commentId: M:FakeS3.FileStore.#ctor(System.String,System.Boolean)
+  fullName: FakeS3.FileStore.FileStore(System.String, System.Boolean)
+  nameWithType: FileStore.FileStore(String, Boolean)
+- uid: FakeS3.FileStore.#ctor*
+  name: FileStore
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore__ctor_
+  commentId: Overload:FakeS3.FileStore.#ctor
+  isSpec: "True"
+  fullName: FakeS3.FileStore.FileStore
+  nameWithType: FileStore.FileStore
+- uid: FakeS3.FileStore.Buckets
+  name: Buckets
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_Buckets
+  commentId: P:FakeS3.FileStore.Buckets
+  fullName: FakeS3.FileStore.Buckets
+  nameWithType: FileStore.Buckets
+- uid: FakeS3.FileStore.Buckets*
+  name: Buckets
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_Buckets_
+  commentId: Overload:FakeS3.FileStore.Buckets
+  isSpec: "True"
+  fullName: FakeS3.FileStore.Buckets
+  nameWithType: FileStore.Buckets
+- uid: FakeS3.FileStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name: CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CombineObjectPartsAsync_FakeS3_IBucket_System_String_System_String_IEnumerable_PartInfo__ObjectMetadata_
+  commentId: M:FakeS3.FileStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name.vb: CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+  fullName: FakeS3.FileStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable<PartInfo>, ObjectMetadata)
+  fullName.vb: FakeS3.FileStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable(Of PartInfo), ObjectMetadata)
+  nameWithType: FileStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  nameWithType.vb: FileStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+- uid: FakeS3.FileStore.CombineObjectPartsAsync*
+  name: CombineObjectPartsAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CombineObjectPartsAsync_
+  commentId: Overload:FakeS3.FileStore.CombineObjectPartsAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.CombineObjectPartsAsync
+  nameWithType: FileStore.CombineObjectPartsAsync
+- uid: FakeS3.FileStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  name: CopyObjectAsync(String, String, String, String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CopyObjectAsync_System_String_System_String_System_String_System_String_
+  commentId: M:FakeS3.FileStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  fullName: FakeS3.FileStore.CopyObjectAsync(System.String, System.String, System.String, System.String)
+  nameWithType: FileStore.CopyObjectAsync(String, String, String, String)
+- uid: FakeS3.FileStore.CopyObjectAsync*
+  name: CopyObjectAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CopyObjectAsync_
+  commentId: Overload:FakeS3.FileStore.CopyObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.CopyObjectAsync
+  nameWithType: FileStore.CopyObjectAsync
+- uid: FakeS3.FileStore.CreateBucketAsync(System.String)
+  name: CreateBucketAsync(String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CreateBucketAsync_System_String_
+  commentId: M:FakeS3.FileStore.CreateBucketAsync(System.String)
+  fullName: FakeS3.FileStore.CreateBucketAsync(System.String)
+  nameWithType: FileStore.CreateBucketAsync(String)
+- uid: FakeS3.FileStore.CreateBucketAsync*
+  name: CreateBucketAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_CreateBucketAsync_
+  commentId: Overload:FakeS3.FileStore.CreateBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.CreateBucketAsync
+  nameWithType: FileStore.CreateBucketAsync
+- uid: FakeS3.FileStore.DeleteBucketAsync(System.String)
+  name: DeleteBucketAsync(String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_DeleteBucketAsync_System_String_
+  commentId: M:FakeS3.FileStore.DeleteBucketAsync(System.String)
+  fullName: FakeS3.FileStore.DeleteBucketAsync(System.String)
+  nameWithType: FileStore.DeleteBucketAsync(String)
+- uid: FakeS3.FileStore.DeleteBucketAsync*
+  name: DeleteBucketAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_DeleteBucketAsync_
+  commentId: Overload:FakeS3.FileStore.DeleteBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.DeleteBucketAsync
+  nameWithType: FileStore.DeleteBucketAsync
+- uid: FakeS3.FileStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name: DeleteObjectsAsync(IBucket, String[])
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_DeleteObjectsAsync_FakeS3_IBucket_System_String___
+  commentId: M:FakeS3.FileStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name.vb: DeleteObjectsAsync(IBucket, String())
+  fullName: FakeS3.FileStore.DeleteObjectsAsync(FakeS3.IBucket, System.String[])
+  fullName.vb: FakeS3.FileStore.DeleteObjectsAsync(FakeS3.IBucket, System.String())
+  nameWithType: FileStore.DeleteObjectsAsync(IBucket, String[])
+  nameWithType.vb: FileStore.DeleteObjectsAsync(IBucket, String())
+- uid: FakeS3.FileStore.DeleteObjectsAsync(System.String,System.String[])
+  name: DeleteObjectsAsync(String, String[])
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_DeleteObjectsAsync_System_String_System_String___
+  commentId: M:FakeS3.FileStore.DeleteObjectsAsync(System.String,System.String[])
+  name.vb: DeleteObjectsAsync(String, String())
+  fullName: FakeS3.FileStore.DeleteObjectsAsync(System.String, System.String[])
+  fullName.vb: FakeS3.FileStore.DeleteObjectsAsync(System.String, System.String())
+  nameWithType: FileStore.DeleteObjectsAsync(String, String[])
+  nameWithType.vb: FileStore.DeleteObjectsAsync(String, String())
+- uid: FakeS3.FileStore.DeleteObjectsAsync*
+  name: DeleteObjectsAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_DeleteObjectsAsync_
+  commentId: Overload:FakeS3.FileStore.DeleteObjectsAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.DeleteObjectsAsync
+  nameWithType: FileStore.DeleteObjectsAsync
+- uid: FakeS3.FileStore.Dispose
+  name: Dispose()
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_Dispose
+  commentId: M:FakeS3.FileStore.Dispose
+  fullName: FakeS3.FileStore.Dispose()
+  nameWithType: FileStore.Dispose()
+- uid: FakeS3.FileStore.Dispose*
+  name: Dispose
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_Dispose_
+  commentId: Overload:FakeS3.FileStore.Dispose
+  isSpec: "True"
+  fullName: FakeS3.FileStore.Dispose
+  nameWithType: FileStore.Dispose
+- uid: FakeS3.FileStore.GetBucketAsync(System.String)
+  name: GetBucketAsync(String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_GetBucketAsync_System_String_
+  commentId: M:FakeS3.FileStore.GetBucketAsync(System.String)
+  fullName: FakeS3.FileStore.GetBucketAsync(System.String)
+  nameWithType: FileStore.GetBucketAsync(String)
+- uid: FakeS3.FileStore.GetBucketAsync*
+  name: GetBucketAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_GetBucketAsync_
+  commentId: Overload:FakeS3.FileStore.GetBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.GetBucketAsync
+  nameWithType: FileStore.GetBucketAsync
+- uid: FakeS3.FileStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  name: GetObjectAsync(IBucket, String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_GetObjectAsync_FakeS3_IBucket_System_String_
+  commentId: M:FakeS3.FileStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  fullName: FakeS3.FileStore.GetObjectAsync(FakeS3.IBucket, System.String)
+  nameWithType: FileStore.GetObjectAsync(IBucket, String)
+- uid: FakeS3.FileStore.GetObjectAsync(System.String,System.String)
+  name: GetObjectAsync(String, String)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_GetObjectAsync_System_String_System_String_
+  commentId: M:FakeS3.FileStore.GetObjectAsync(System.String,System.String)
+  fullName: FakeS3.FileStore.GetObjectAsync(System.String, System.String)
+  nameWithType: FileStore.GetObjectAsync(String, String)
+- uid: FakeS3.FileStore.GetObjectAsync*
+  name: GetObjectAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_GetObjectAsync_
+  commentId: Overload:FakeS3.FileStore.GetObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.GetObjectAsync
+  nameWithType: FileStore.GetObjectAsync
+- uid: FakeS3.FileStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_StoreObjectAsync_FakeS3_IBucket_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.FileStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.FileStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.FileStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: FileStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: FileStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.FileStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_StoreObjectAsync_System_String_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.FileStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.FileStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.FileStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: FileStore.StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: FileStore.StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.FileStore.StoreObjectAsync*
+  name: StoreObjectAsync
+  href: api/FakeS3.FileStore.html#FakeS3_FileStore_StoreObjectAsync_
+  commentId: Overload:FakeS3.FileStore.StoreObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.FileStore.StoreObjectAsync
+  nameWithType: FileStore.StoreObjectAsync
+- uid: FakeS3.IBucket
+  name: IBucket
+  href: api/FakeS3.IBucket.html
+  commentId: T:FakeS3.IBucket
+  fullName: FakeS3.IBucket
+  nameWithType: IBucket
+- uid: FakeS3.IBucket.Add(FakeS3.IObject)
+  name: Add(IObject)
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Add_FakeS3_IObject_
+  commentId: M:FakeS3.IBucket.Add(FakeS3.IObject)
+  fullName: FakeS3.IBucket.Add(FakeS3.IObject)
+  nameWithType: IBucket.Add(IObject)
+- uid: FakeS3.IBucket.Add*
+  name: Add
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Add_
+  commentId: Overload:FakeS3.IBucket.Add
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Add
+  nameWithType: IBucket.Add
+- uid: FakeS3.IBucket.Created
+  name: Created
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Created
+  commentId: P:FakeS3.IBucket.Created
+  fullName: FakeS3.IBucket.Created
+  nameWithType: IBucket.Created
+- uid: FakeS3.IBucket.Created*
+  name: Created
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Created_
+  commentId: Overload:FakeS3.IBucket.Created
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Created
+  nameWithType: IBucket.Created
+- uid: FakeS3.IBucket.Find(System.String)
+  name: Find(String)
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Find_System_String_
+  commentId: M:FakeS3.IBucket.Find(System.String)
+  fullName: FakeS3.IBucket.Find(System.String)
+  nameWithType: IBucket.Find(String)
+- uid: FakeS3.IBucket.Find*
+  name: Find
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Find_
+  commentId: Overload:FakeS3.IBucket.Find
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Find
+  nameWithType: IBucket.Find
+- uid: FakeS3.IBucket.Name
+  name: Name
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Name
+  commentId: P:FakeS3.IBucket.Name
+  fullName: FakeS3.IBucket.Name
+  nameWithType: IBucket.Name
+- uid: FakeS3.IBucket.Name*
+  name: Name
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Name_
+  commentId: Overload:FakeS3.IBucket.Name
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Name
+  nameWithType: IBucket.Name
+- uid: FakeS3.IBucket.Objects
+  name: Objects
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Objects
+  commentId: P:FakeS3.IBucket.Objects
+  fullName: FakeS3.IBucket.Objects
+  nameWithType: IBucket.Objects
+- uid: FakeS3.IBucket.Objects*
+  name: Objects
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Objects_
+  commentId: Overload:FakeS3.IBucket.Objects
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Objects
+  nameWithType: IBucket.Objects
+- uid: FakeS3.IBucket.QueryForRange(QueryOptions)
+  name: QueryForRange(QueryOptions)
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_QueryForRange_QueryOptions_
+  commentId: M:FakeS3.IBucket.QueryForRange(QueryOptions)
+  fullName: FakeS3.IBucket.QueryForRange(QueryOptions)
+  nameWithType: IBucket.QueryForRange(QueryOptions)
+- uid: FakeS3.IBucket.QueryForRange*
+  name: QueryForRange
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_QueryForRange_
+  commentId: Overload:FakeS3.IBucket.QueryForRange
+  isSpec: "True"
+  fullName: FakeS3.IBucket.QueryForRange
+  nameWithType: IBucket.QueryForRange
+- uid: FakeS3.IBucket.Remove(FakeS3.IObject)
+  name: Remove(IObject)
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Remove_FakeS3_IObject_
+  commentId: M:FakeS3.IBucket.Remove(FakeS3.IObject)
+  fullName: FakeS3.IBucket.Remove(FakeS3.IObject)
+  nameWithType: IBucket.Remove(IObject)
+- uid: FakeS3.IBucket.Remove*
+  name: Remove
+  href: api/FakeS3.IBucket.html#FakeS3_IBucket_Remove_
+  commentId: Overload:FakeS3.IBucket.Remove
+  isSpec: "True"
+  fullName: FakeS3.IBucket.Remove
+  nameWithType: IBucket.Remove
+- uid: FakeS3.IBucketStore
+  name: IBucketStore
+  href: api/FakeS3.IBucketStore.html
+  commentId: T:FakeS3.IBucketStore
+  fullName: FakeS3.IBucketStore
+  nameWithType: IBucketStore
+- uid: FakeS3.IBucketStore.Buckets
+  name: Buckets
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_Buckets
+  commentId: P:FakeS3.IBucketStore.Buckets
+  fullName: FakeS3.IBucketStore.Buckets
+  nameWithType: IBucketStore.Buckets
+- uid: FakeS3.IBucketStore.Buckets*
+  name: Buckets
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_Buckets_
+  commentId: Overload:FakeS3.IBucketStore.Buckets
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.Buckets
+  nameWithType: IBucketStore.Buckets
+- uid: FakeS3.IBucketStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name: CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CombineObjectPartsAsync_FakeS3_IBucket_System_String_System_String_IEnumerable_PartInfo__ObjectMetadata_
+  commentId: M:FakeS3.IBucketStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name.vb: CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+  fullName: FakeS3.IBucketStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable<PartInfo>, ObjectMetadata)
+  fullName.vb: FakeS3.IBucketStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable(Of PartInfo), ObjectMetadata)
+  nameWithType: IBucketStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  nameWithType.vb: IBucketStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+- uid: FakeS3.IBucketStore.CombineObjectPartsAsync*
+  name: CombineObjectPartsAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CombineObjectPartsAsync_
+  commentId: Overload:FakeS3.IBucketStore.CombineObjectPartsAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.CombineObjectPartsAsync
+  nameWithType: IBucketStore.CombineObjectPartsAsync
+- uid: FakeS3.IBucketStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  name: CopyObjectAsync(String, String, String, String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CopyObjectAsync_System_String_System_String_System_String_System_String_
+  commentId: M:FakeS3.IBucketStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  fullName: FakeS3.IBucketStore.CopyObjectAsync(System.String, System.String, System.String, System.String)
+  nameWithType: IBucketStore.CopyObjectAsync(String, String, String, String)
+- uid: FakeS3.IBucketStore.CopyObjectAsync*
+  name: CopyObjectAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CopyObjectAsync_
+  commentId: Overload:FakeS3.IBucketStore.CopyObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.CopyObjectAsync
+  nameWithType: IBucketStore.CopyObjectAsync
+- uid: FakeS3.IBucketStore.CreateBucketAsync(System.String)
+  name: CreateBucketAsync(String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CreateBucketAsync_System_String_
+  commentId: M:FakeS3.IBucketStore.CreateBucketAsync(System.String)
+  fullName: FakeS3.IBucketStore.CreateBucketAsync(System.String)
+  nameWithType: IBucketStore.CreateBucketAsync(String)
+- uid: FakeS3.IBucketStore.CreateBucketAsync*
+  name: CreateBucketAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_CreateBucketAsync_
+  commentId: Overload:FakeS3.IBucketStore.CreateBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.CreateBucketAsync
+  nameWithType: IBucketStore.CreateBucketAsync
+- uid: FakeS3.IBucketStore.DeleteBucketAsync(System.String)
+  name: DeleteBucketAsync(String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_DeleteBucketAsync_System_String_
+  commentId: M:FakeS3.IBucketStore.DeleteBucketAsync(System.String)
+  fullName: FakeS3.IBucketStore.DeleteBucketAsync(System.String)
+  nameWithType: IBucketStore.DeleteBucketAsync(String)
+- uid: FakeS3.IBucketStore.DeleteBucketAsync*
+  name: DeleteBucketAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_DeleteBucketAsync_
+  commentId: Overload:FakeS3.IBucketStore.DeleteBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.DeleteBucketAsync
+  nameWithType: IBucketStore.DeleteBucketAsync
+- uid: FakeS3.IBucketStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name: DeleteObjectsAsync(IBucket, String[])
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_DeleteObjectsAsync_FakeS3_IBucket_System_String___
+  commentId: M:FakeS3.IBucketStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name.vb: DeleteObjectsAsync(IBucket, String())
+  fullName: FakeS3.IBucketStore.DeleteObjectsAsync(FakeS3.IBucket, System.String[])
+  fullName.vb: FakeS3.IBucketStore.DeleteObjectsAsync(FakeS3.IBucket, System.String())
+  nameWithType: IBucketStore.DeleteObjectsAsync(IBucket, String[])
+  nameWithType.vb: IBucketStore.DeleteObjectsAsync(IBucket, String())
+- uid: FakeS3.IBucketStore.DeleteObjectsAsync(System.String,System.String[])
+  name: DeleteObjectsAsync(String, String[])
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_DeleteObjectsAsync_System_String_System_String___
+  commentId: M:FakeS3.IBucketStore.DeleteObjectsAsync(System.String,System.String[])
+  name.vb: DeleteObjectsAsync(String, String())
+  fullName: FakeS3.IBucketStore.DeleteObjectsAsync(System.String, System.String[])
+  fullName.vb: FakeS3.IBucketStore.DeleteObjectsAsync(System.String, System.String())
+  nameWithType: IBucketStore.DeleteObjectsAsync(String, String[])
+  nameWithType.vb: IBucketStore.DeleteObjectsAsync(String, String())
+- uid: FakeS3.IBucketStore.DeleteObjectsAsync*
+  name: DeleteObjectsAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_DeleteObjectsAsync_
+  commentId: Overload:FakeS3.IBucketStore.DeleteObjectsAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.DeleteObjectsAsync
+  nameWithType: IBucketStore.DeleteObjectsAsync
+- uid: FakeS3.IBucketStore.GetBucketAsync(System.String)
+  name: GetBucketAsync(String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_GetBucketAsync_System_String_
+  commentId: M:FakeS3.IBucketStore.GetBucketAsync(System.String)
+  fullName: FakeS3.IBucketStore.GetBucketAsync(System.String)
+  nameWithType: IBucketStore.GetBucketAsync(String)
+- uid: FakeS3.IBucketStore.GetBucketAsync*
+  name: GetBucketAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_GetBucketAsync_
+  commentId: Overload:FakeS3.IBucketStore.GetBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.GetBucketAsync
+  nameWithType: IBucketStore.GetBucketAsync
+- uid: FakeS3.IBucketStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  name: GetObjectAsync(IBucket, String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_GetObjectAsync_FakeS3_IBucket_System_String_
+  commentId: M:FakeS3.IBucketStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  fullName: FakeS3.IBucketStore.GetObjectAsync(FakeS3.IBucket, System.String)
+  nameWithType: IBucketStore.GetObjectAsync(IBucket, String)
+- uid: FakeS3.IBucketStore.GetObjectAsync(System.String,System.String)
+  name: GetObjectAsync(String, String)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_GetObjectAsync_System_String_System_String_
+  commentId: M:FakeS3.IBucketStore.GetObjectAsync(System.String,System.String)
+  fullName: FakeS3.IBucketStore.GetObjectAsync(System.String, System.String)
+  nameWithType: IBucketStore.GetObjectAsync(String, String)
+- uid: FakeS3.IBucketStore.GetObjectAsync*
+  name: GetObjectAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_GetObjectAsync_
+  commentId: Overload:FakeS3.IBucketStore.GetObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.GetObjectAsync
+  nameWithType: IBucketStore.GetObjectAsync
+- uid: FakeS3.IBucketStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_StoreObjectAsync_FakeS3_IBucket_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.IBucketStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.IBucketStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.IBucketStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: IBucketStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: IBucketStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.IBucketStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_StoreObjectAsync_System_String_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.IBucketStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.IBucketStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.IBucketStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: IBucketStore.StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: IBucketStore.StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.IBucketStore.StoreObjectAsync*
+  name: StoreObjectAsync
+  href: api/FakeS3.IBucketStore.html#FakeS3_IBucketStore_StoreObjectAsync_
+  commentId: Overload:FakeS3.IBucketStore.StoreObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.IBucketStore.StoreObjectAsync
+  nameWithType: IBucketStore.StoreObjectAsync
+- uid: FakeS3.IObject
+  name: IObject
+  href: api/FakeS3.IObject.html
+  commentId: T:FakeS3.IObject
+  fullName: FakeS3.IObject
+  nameWithType: IObject
+- uid: FakeS3.IObject.Io
+  name: Io
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Io
+  commentId: P:FakeS3.IObject.Io
+  fullName: FakeS3.IObject.Io
+  nameWithType: IObject.Io
+- uid: FakeS3.IObject.Io*
+  name: Io
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Io_
+  commentId: Overload:FakeS3.IObject.Io
+  isSpec: "True"
+  fullName: FakeS3.IObject.Io
+  nameWithType: IObject.Io
+- uid: FakeS3.IObject.Metadata
+  name: Metadata
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Metadata
+  commentId: P:FakeS3.IObject.Metadata
+  fullName: FakeS3.IObject.Metadata
+  nameWithType: IObject.Metadata
+- uid: FakeS3.IObject.Metadata*
+  name: Metadata
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Metadata_
+  commentId: Overload:FakeS3.IObject.Metadata
+  isSpec: "True"
+  fullName: FakeS3.IObject.Metadata
+  nameWithType: IObject.Metadata
+- uid: FakeS3.IObject.Name
+  name: Name
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Name
+  commentId: P:FakeS3.IObject.Name
+  fullName: FakeS3.IObject.Name
+  nameWithType: IObject.Name
+- uid: FakeS3.IObject.Name*
+  name: Name
+  href: api/FakeS3.IObject.html#FakeS3_IObject_Name_
+  commentId: Overload:FakeS3.IObject.Name
+  isSpec: "True"
+  fullName: FakeS3.IObject.Name
+  nameWithType: IObject.Name
+- uid: FakeS3.IStoreStream
+  name: IStoreStream
+  href: api/FakeS3.IStoreStream.html
+  commentId: T:FakeS3.IStoreStream
+  fullName: FakeS3.IStoreStream
+  nameWithType: IStoreStream
+- uid: FakeS3.IStoreStream.ContentSize
+  name: ContentSize
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_ContentSize
+  commentId: P:FakeS3.IStoreStream.ContentSize
+  fullName: FakeS3.IStoreStream.ContentSize
+  nameWithType: IStoreStream.ContentSize
+- uid: FakeS3.IStoreStream.ContentSize*
+  name: ContentSize
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_ContentSize_
+  commentId: Overload:FakeS3.IStoreStream.ContentSize
+  isSpec: "True"
+  fullName: FakeS3.IStoreStream.ContentSize
+  nameWithType: IStoreStream.ContentSize
+- uid: FakeS3.IStoreStream.ReadAsync(System.Byte[],System.Int32,System.Int32)
+  name: ReadAsync(Byte[], Int32, Int32)
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_ReadAsync_System_Byte___System_Int32_System_Int32_
+  commentId: M:FakeS3.IStoreStream.ReadAsync(System.Byte[],System.Int32,System.Int32)
+  name.vb: ReadAsync(Byte(), Int32, Int32)
+  fullName: FakeS3.IStoreStream.ReadAsync(System.Byte[], System.Int32, System.Int32)
+  fullName.vb: FakeS3.IStoreStream.ReadAsync(System.Byte(), System.Int32, System.Int32)
+  nameWithType: IStoreStream.ReadAsync(Byte[], Int32, Int32)
+  nameWithType.vb: IStoreStream.ReadAsync(Byte(), Int32, Int32)
+- uid: FakeS3.IStoreStream.ReadAsync*
+  name: ReadAsync
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_ReadAsync_
+  commentId: Overload:FakeS3.IStoreStream.ReadAsync
+  isSpec: "True"
+  fullName: FakeS3.IStoreStream.ReadAsync
+  nameWithType: IStoreStream.ReadAsync
+- uid: FakeS3.IStoreStream.Stream
+  name: Stream
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_Stream
+  commentId: P:FakeS3.IStoreStream.Stream
+  fullName: FakeS3.IStoreStream.Stream
+  nameWithType: IStoreStream.Stream
+- uid: FakeS3.IStoreStream.Stream*
+  name: Stream
+  href: api/FakeS3.IStoreStream.html#FakeS3_IStoreStream_Stream_
+  commentId: Overload:FakeS3.IStoreStream.Stream
+  isSpec: "True"
+  fullName: FakeS3.IStoreStream.Stream
+  nameWithType: IStoreStream.Stream
+- uid: FakeS3.MemoryStore
+  name: MemoryStore
+  href: api/FakeS3.MemoryStore.html
+  commentId: T:FakeS3.MemoryStore
+  fullName: FakeS3.MemoryStore
+  nameWithType: MemoryStore
+- uid: FakeS3.MemoryStore.Buckets
+  name: Buckets
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_Buckets
+  commentId: P:FakeS3.MemoryStore.Buckets
+  fullName: FakeS3.MemoryStore.Buckets
+  nameWithType: MemoryStore.Buckets
+- uid: FakeS3.MemoryStore.Buckets*
+  name: Buckets
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_Buckets_
+  commentId: Overload:FakeS3.MemoryStore.Buckets
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.Buckets
+  nameWithType: MemoryStore.Buckets
+- uid: FakeS3.MemoryStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name: CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CombineObjectPartsAsync_FakeS3_IBucket_System_String_System_String_IEnumerable_PartInfo__ObjectMetadata_
+  commentId: M:FakeS3.MemoryStore.CombineObjectPartsAsync(FakeS3.IBucket,System.String,System.String,IEnumerable{PartInfo},ObjectMetadata)
+  name.vb: CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+  fullName: FakeS3.MemoryStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable<PartInfo>, ObjectMetadata)
+  fullName.vb: FakeS3.MemoryStore.CombineObjectPartsAsync(FakeS3.IBucket, System.String, System.String, IEnumerable(Of PartInfo), ObjectMetadata)
+  nameWithType: MemoryStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable<PartInfo>, ObjectMetadata)
+  nameWithType.vb: MemoryStore.CombineObjectPartsAsync(IBucket, String, String, IEnumerable(Of PartInfo), ObjectMetadata)
+- uid: FakeS3.MemoryStore.CombineObjectPartsAsync*
+  name: CombineObjectPartsAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CombineObjectPartsAsync_
+  commentId: Overload:FakeS3.MemoryStore.CombineObjectPartsAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.CombineObjectPartsAsync
+  nameWithType: MemoryStore.CombineObjectPartsAsync
+- uid: FakeS3.MemoryStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  name: CopyObjectAsync(String, String, String, String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CopyObjectAsync_System_String_System_String_System_String_System_String_
+  commentId: M:FakeS3.MemoryStore.CopyObjectAsync(System.String,System.String,System.String,System.String)
+  fullName: FakeS3.MemoryStore.CopyObjectAsync(System.String, System.String, System.String, System.String)
+  nameWithType: MemoryStore.CopyObjectAsync(String, String, String, String)
+- uid: FakeS3.MemoryStore.CopyObjectAsync*
+  name: CopyObjectAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CopyObjectAsync_
+  commentId: Overload:FakeS3.MemoryStore.CopyObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.CopyObjectAsync
+  nameWithType: MemoryStore.CopyObjectAsync
+- uid: FakeS3.MemoryStore.CreateBucketAsync(System.String)
+  name: CreateBucketAsync(String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CreateBucketAsync_System_String_
+  commentId: M:FakeS3.MemoryStore.CreateBucketAsync(System.String)
+  fullName: FakeS3.MemoryStore.CreateBucketAsync(System.String)
+  nameWithType: MemoryStore.CreateBucketAsync(String)
+- uid: FakeS3.MemoryStore.CreateBucketAsync*
+  name: CreateBucketAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_CreateBucketAsync_
+  commentId: Overload:FakeS3.MemoryStore.CreateBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.CreateBucketAsync
+  nameWithType: MemoryStore.CreateBucketAsync
+- uid: FakeS3.MemoryStore.DeleteBucketAsync(System.String)
+  name: DeleteBucketAsync(String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_DeleteBucketAsync_System_String_
+  commentId: M:FakeS3.MemoryStore.DeleteBucketAsync(System.String)
+  fullName: FakeS3.MemoryStore.DeleteBucketAsync(System.String)
+  nameWithType: MemoryStore.DeleteBucketAsync(String)
+- uid: FakeS3.MemoryStore.DeleteBucketAsync*
+  name: DeleteBucketAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_DeleteBucketAsync_
+  commentId: Overload:FakeS3.MemoryStore.DeleteBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.DeleteBucketAsync
+  nameWithType: MemoryStore.DeleteBucketAsync
+- uid: FakeS3.MemoryStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name: DeleteObjectsAsync(IBucket, String[])
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_DeleteObjectsAsync_FakeS3_IBucket_System_String___
+  commentId: M:FakeS3.MemoryStore.DeleteObjectsAsync(FakeS3.IBucket,System.String[])
+  name.vb: DeleteObjectsAsync(IBucket, String())
+  fullName: FakeS3.MemoryStore.DeleteObjectsAsync(FakeS3.IBucket, System.String[])
+  fullName.vb: FakeS3.MemoryStore.DeleteObjectsAsync(FakeS3.IBucket, System.String())
+  nameWithType: MemoryStore.DeleteObjectsAsync(IBucket, String[])
+  nameWithType.vb: MemoryStore.DeleteObjectsAsync(IBucket, String())
+- uid: FakeS3.MemoryStore.DeleteObjectsAsync(System.String,System.String[])
+  name: DeleteObjectsAsync(String, String[])
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_DeleteObjectsAsync_System_String_System_String___
+  commentId: M:FakeS3.MemoryStore.DeleteObjectsAsync(System.String,System.String[])
+  name.vb: DeleteObjectsAsync(String, String())
+  fullName: FakeS3.MemoryStore.DeleteObjectsAsync(System.String, System.String[])
+  fullName.vb: FakeS3.MemoryStore.DeleteObjectsAsync(System.String, System.String())
+  nameWithType: MemoryStore.DeleteObjectsAsync(String, String[])
+  nameWithType.vb: MemoryStore.DeleteObjectsAsync(String, String())
+- uid: FakeS3.MemoryStore.DeleteObjectsAsync*
+  name: DeleteObjectsAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_DeleteObjectsAsync_
+  commentId: Overload:FakeS3.MemoryStore.DeleteObjectsAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.DeleteObjectsAsync
+  nameWithType: MemoryStore.DeleteObjectsAsync
+- uid: FakeS3.MemoryStore.Dispose
+  name: Dispose()
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_Dispose
+  commentId: M:FakeS3.MemoryStore.Dispose
+  fullName: FakeS3.MemoryStore.Dispose()
+  nameWithType: MemoryStore.Dispose()
+- uid: FakeS3.MemoryStore.Dispose*
+  name: Dispose
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_Dispose_
+  commentId: Overload:FakeS3.MemoryStore.Dispose
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.Dispose
+  nameWithType: MemoryStore.Dispose
+- uid: FakeS3.MemoryStore.GetBucketAsync(System.String)
+  name: GetBucketAsync(String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_GetBucketAsync_System_String_
+  commentId: M:FakeS3.MemoryStore.GetBucketAsync(System.String)
+  fullName: FakeS3.MemoryStore.GetBucketAsync(System.String)
+  nameWithType: MemoryStore.GetBucketAsync(String)
+- uid: FakeS3.MemoryStore.GetBucketAsync*
+  name: GetBucketAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_GetBucketAsync_
+  commentId: Overload:FakeS3.MemoryStore.GetBucketAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.GetBucketAsync
+  nameWithType: MemoryStore.GetBucketAsync
+- uid: FakeS3.MemoryStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  name: GetObjectAsync(IBucket, String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_GetObjectAsync_FakeS3_IBucket_System_String_
+  commentId: M:FakeS3.MemoryStore.GetObjectAsync(FakeS3.IBucket,System.String)
+  fullName: FakeS3.MemoryStore.GetObjectAsync(FakeS3.IBucket, System.String)
+  nameWithType: MemoryStore.GetObjectAsync(IBucket, String)
+- uid: FakeS3.MemoryStore.GetObjectAsync(System.String,System.String)
+  name: GetObjectAsync(String, String)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_GetObjectAsync_System_String_System_String_
+  commentId: M:FakeS3.MemoryStore.GetObjectAsync(System.String,System.String)
+  fullName: FakeS3.MemoryStore.GetObjectAsync(System.String, System.String)
+  nameWithType: MemoryStore.GetObjectAsync(String, String)
+- uid: FakeS3.MemoryStore.GetObjectAsync*
+  name: GetObjectAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_GetObjectAsync_
+  commentId: Overload:FakeS3.MemoryStore.GetObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.GetObjectAsync
+  nameWithType: MemoryStore.GetObjectAsync
+- uid: FakeS3.MemoryStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_StoreObjectAsync_FakeS3_IBucket_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.MemoryStore.StoreObjectAsync(FakeS3.IBucket,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.MemoryStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.MemoryStore.StoreObjectAsync(FakeS3.IBucket, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: MemoryStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: MemoryStore.StoreObjectAsync(IBucket, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.MemoryStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name: StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_StoreObjectAsync_System_String_System_String_ReadOnlyMemory_System_Byte__ObjectMetadata_
+  commentId: M:FakeS3.MemoryStore.StoreObjectAsync(System.String,System.String,ReadOnlyMemory{System.Byte},ObjectMetadata)
+  name.vb: StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+  fullName: FakeS3.MemoryStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory<System.Byte>, ObjectMetadata)
+  fullName.vb: FakeS3.MemoryStore.StoreObjectAsync(System.String, System.String, ReadOnlyMemory(Of System.Byte), ObjectMetadata)
+  nameWithType: MemoryStore.StoreObjectAsync(String, String, ReadOnlyMemory<Byte>, ObjectMetadata)
+  nameWithType.vb: MemoryStore.StoreObjectAsync(String, String, ReadOnlyMemory(Of Byte), ObjectMetadata)
+- uid: FakeS3.MemoryStore.StoreObjectAsync*
+  name: StoreObjectAsync
+  href: api/FakeS3.MemoryStore.html#FakeS3_MemoryStore_StoreObjectAsync_
+  commentId: Overload:FakeS3.MemoryStore.StoreObjectAsync
+  isSpec: "True"
+  fullName: FakeS3.MemoryStore.StoreObjectAsync
+  nameWithType: MemoryStore.StoreObjectAsync
+- uid: FakeS3.Tests
+  name: FakeS3.Tests
+  href: api/FakeS3.Tests.html
+  commentId: N:FakeS3.Tests
+  fullName: FakeS3.Tests
+  nameWithType: FakeS3.Tests
+- uid: FakeS3.Tests.FakeClientTests
+  name: FakeClientTests
+  href: api/FakeS3.Tests.FakeClientTests.html
+  commentId: T:FakeS3.Tests.FakeClientTests
+  fullName: FakeS3.Tests.FakeClientTests
+  nameWithType: FakeClientTests
+- uid: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData(IAmazonS3)
+  name: ClientCanUploadAndDownloadData(IAmazonS3)
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_ClientCanUploadAndDownloadData_IAmazonS3_
+  commentId: M:FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData(IAmazonS3)
+  fullName: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData(IAmazonS3)
+  nameWithType: FakeClientTests.ClientCanUploadAndDownloadData(IAmazonS3)
+- uid: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData*
+  name: ClientCanUploadAndDownloadData
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_ClientCanUploadAndDownloadData_
+  commentId: Overload:FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData
+  isSpec: "True"
+  fullName: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadData
+  nameWithType: FakeClientTests.ClientCanUploadAndDownloadData
+- uid: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts(IAmazonS3)
+  name: ClientCanUploadAndDownloadDataInParts(IAmazonS3)
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_ClientCanUploadAndDownloadDataInParts_IAmazonS3_
+  commentId: M:FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts(IAmazonS3)
+  fullName: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts(IAmazonS3)
+  nameWithType: FakeClientTests.ClientCanUploadAndDownloadDataInParts(IAmazonS3)
+- uid: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts*
+  name: ClientCanUploadAndDownloadDataInParts
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_ClientCanUploadAndDownloadDataInParts_
+  commentId: Overload:FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts
+  isSpec: "True"
+  fullName: FakeS3.Tests.FakeClientTests.ClientCanUploadAndDownloadDataInParts
+  nameWithType: FakeClientTests.ClientCanUploadAndDownloadDataInParts
+- uid: FakeS3.Tests.FakeClientTests.Clients
+  name: Clients()
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_Clients
+  commentId: M:FakeS3.Tests.FakeClientTests.Clients
+  fullName: FakeS3.Tests.FakeClientTests.Clients()
+  nameWithType: FakeClientTests.Clients()
+- uid: FakeS3.Tests.FakeClientTests.Clients*
+  name: Clients
+  href: api/FakeS3.Tests.FakeClientTests.html#FakeS3_Tests_FakeClientTests_Clients_
+  commentId: Overload:FakeS3.Tests.FakeClientTests.Clients
+  isSpec: "True"
+  fullName: FakeS3.Tests.FakeClientTests.Clients
+  nameWithType: FakeClientTests.Clients
