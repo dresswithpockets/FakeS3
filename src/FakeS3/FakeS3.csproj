@@ -4,6 +4,17 @@
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <PackageId>FakeS3</PackageId>
+        <Version>0.1.0</Version>
+        <Authors>dresswithpockets</Authors>
+        <Description>Provides in-memory and on-disk implementations for storing S3-like buckets and objects. Based on fake-s3.</Description>
+        <PackageProjectUrl>https://github.com/dresswithpockets/FakeS3</PackageProjectUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/dresswithpockets/FakeS3</RepositoryUrl>
     </PropertyGroup>
 
 </Project>
