@@ -27,5 +27,8 @@ public class FileStoreTests : IDisposable
     public Task CanUploadAndDownloadData() => CommonTests.CanUploadAndDownloadData(_fileClient);
 
     [Fact]
-    public Task ClientCanUploadAndDownloadDataInParts() => CommonTests.CanUploadAndDownloadDataInParts(_fileClient);
+    public Task CanUploadAndDownloadDataInParts() => CommonTests.CanUploadAndDownloadDataInParts(_fileClient);
+
+    [Fact]
+    public Task CanUploadAndDeleteData() => CommonTests.CanUploadAndDeleteData(_fileClient);
 }

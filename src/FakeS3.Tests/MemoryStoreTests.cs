@@ -22,4 +22,7 @@ public class MemoryStoreTests : IDisposable
 
     [Fact]
     public Task ClientCanUploadAndDownloadDataInParts() => CommonTests.CanUploadAndDownloadDataInParts(_memoryClient);
+
+    [Fact]
+    public Task CanUploadAndDeleteData() => CommonTests.CanUploadAndDeleteData(_memoryClient);
 }
