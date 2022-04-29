@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using FakeS3.Internal;
 using Object = FakeS3.Internal.Object;
@@ -115,7 +118,7 @@ namespace FakeS3
                 }
             }
 
-            var destObject = destBucket.Find(destObjectName);
+            var destObject = destBucket.Find(destObjectName) as Object;
             
             if (sourceBucketName != destBucketName || sourceObjectName != destObjectName)
             {
@@ -123,9 +126,13 @@ namespace FakeS3
                 if (!destBucketMemory.TryGetValue(destObjectName, out var destMemoryStream))
                     destBucketMemory.Add(destObjectName, destMemoryStream = new RateLimitedMemoryStream());
                 
-                destMemoryStream.Reset();
+                destMemoryStream.Clear();
                 await srcMemoryStream.Stream.CopyToAsync(destMemoryStream.Stream);
 
+                // todo(ashley) the Find Remove Add pattern is really ugly imo, and slow!
+                if (destObject != null)
+                    destBucket.Remove(destObject);
+                    
                 destObject = new Object(destObjectName, null, srcObject.Metadata);
             }
 
@@ -133,46 +140,127 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(
+        public async Task<IObject> StoreObjectAsync(
             IBucket bucket,
             string objectName,
             ReadOnlyMemory<byte> data,
             ObjectMetadata metadata)
         {
-            throw new NotImplementedException();
+            if (!_memoryMap.TryGetValue(bucket.Name, out var bucketMemory))
+                _memoryMap.Add(bucket.Name, bucketMemory = new Dictionary<string, RateLimitedMemoryStream>());
+
+            var obj = bucket.Find(objectName) as Object;
+            
+            if (bucketMemory.TryGetValue(objectName, out var memoryStream))
+                memoryStream.Dispose();
+
+            memoryStream = bucketMemory[objectName] = new RateLimitedMemoryStream(data.Length);
+            await memoryStream.Stream.WriteAsync(data);
+
+            // todo(ashley) the Find Remove Add pattern is really ugly imo, and slow!
+            if (obj != null)
+                bucket.Remove(obj);
+
+            obj = new Object(objectName, null, metadata);
+            // todo(ashley) this is not atomic with Find() or Remove()
+            bucket.Add(obj);
+            return obj;
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(
+        public async Task<IObject> StoreObjectAsync(
             string bucketName,
             string objectName,
             ReadOnlyMemory<byte> data,
             ObjectMetadata metadata)
         {
-            throw new NotImplementedException();
+            var bucket = await GetBucketAsync(bucketName);
+            
+            // todo(ashley) handle bucket not found
+
+            return await StoreObjectAsync(bucket, objectName, data, metadata);
         }
 
         /// <inheritdoc />
         public Task<IEnumerable<string>> DeleteObjectsAsync(IBucket bucket, params string[] objectNames)
         {
-            throw new NotImplementedException();
+            IEnumerable<string> DoDelete()
+            {
+                _memoryMap.TryGetValue(bucket.Name, out var bucketMemory);
+                
+                foreach (var name in objectNames)
+                {
+                    var obj = bucket.Find(name);
+                    if (obj == null) continue;
+
+                    bucket.Remove(obj); // todo(ashley) not atomic with Find()
+
+                    if (bucketMemory?.Remove(name, out var memoryStream) ?? false)
+                        memoryStream.Dispose();
+
+                    yield return name;
+                }
+            }
+
+            return Task.FromResult(DoDelete());
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames)
+        public async Task<IEnumerable<string>> DeleteObjectsAsync(string bucketName, params string[] objectNames)
         {
-            throw new NotImplementedException();
+            var bucket = await GetBucketAsync(bucketName);
+
+            return await DeleteObjectsAsync(bucket, objectNames);
         }
 
         /// <inheritdoc />
-        public Task<IObject> CombineObjectPartsAsync(
+        public async Task<IObject> CombineObjectPartsAsync(
             IBucket bucket,
             string uploadId,
             string objectName,
             IEnumerable<PartInfo> parts,
             ObjectMetadata metadata)
         {
-            throw new NotImplementedException();
+            if (!_memoryMap.TryGetValue(bucket.Name, out var bucketMemory))
+                _memoryMap.Add(bucket.Name, bucketMemory = new Dictionary<string, RateLimitedMemoryStream>());
+            
+            var completeData = new MemoryStream();
+            var partNames = new List<string>();
+            
+            // todo(ashley) some of this can be parallelized i think
+            foreach (var (number, etag) in parts)
+            {
+                var partName = $"{uploadId}_{objectName}_part{number}";
+                if (!bucketMemory.TryGetValue(partName, out var memoryStream))
+                    throw new InvalidOperationException($"No part with name {partName}");
+
+                var chunk = new byte[memoryStream.ContentSize];
+                await memoryStream.ReadAsync(chunk, 0, chunk.Length);
+
+                using var hasher = MD5.Create();
+                var contentHash = hasher.ComputeHash(chunk).ToHexString();
+
+                if (contentHash != etag)
+                    throw new InvalidOperationException("Invalid object chunk");
+
+                await completeData.WriteAsync(chunk);
+                partNames.Add(partName);
+            }
+
+            var realObject = await StoreObjectAsync(bucket, objectName, completeData.ToArray(), metadata);
+
+            foreach (var name in partNames)
+            {
+                if (bucketMemory.Remove(name, out var memoryStream))
+                    memoryStream.Dispose();
+
+                var obj = bucket.Find(name);
+                if (obj != null)
+                    bucket.Remove(obj);
+            }
+
+            await completeData.DisposeAsync();
+            return realObject;
         }
     }
 }
