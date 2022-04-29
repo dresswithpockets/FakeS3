@@ -16,6 +16,14 @@ namespace FakeS3.Internal
 
         public RateLimitedMemoryStream(int initialCapacity = 0) => _stream = new MemoryStream(initialCapacity);
 
+        public RateLimitedMemoryStream(Stream copyStream)
+        {
+            _stream = new MemoryStream();
+            copyStream.Seek(0, SeekOrigin.Begin);
+            copyStream.CopyTo(_stream);
+            _stream.Seek(0, SeekOrigin.Begin);
+        }
+
         public Task<int> ReadAsync(byte[] array, int offset, int count)
             => _stream.ReadAsync(array, offset, Math.Min(count, RateLimit));
 
