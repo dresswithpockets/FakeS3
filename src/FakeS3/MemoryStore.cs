@@ -71,7 +71,7 @@ namespace FakeS3
 
             return bucket.Find(objectName) is not Object realObject
                 ? Task.FromResult<IObject?>(null)
-                : Task.FromResult<IObject?>(realObject with {Io = memoryStream});
+                : Task.FromResult<IObject?>(realObject with {Io = new RateLimitedMemoryStream(memoryStream.Stream)});
         }
 
         /// <inheritdoc />
