@@ -19,8 +19,8 @@ namespace FakeS3.Internal
         public Task<int> ReadAsync(byte[] array, int offset, int count)
             => _stream.ReadAsync(array, offset, Math.Min(count, RateLimit));
 
-        public void Reset() => _stream.SetLength(0);
-
+        public void Clear() => _stream.SetLength(0);
+        
         public void Dispose()
         {
             _stream.Dispose();
