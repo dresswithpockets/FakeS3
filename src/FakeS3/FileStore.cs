@@ -60,7 +60,7 @@ namespace FakeS3
             var objectDir = Path.Join(_root, bucket.Name, objectName);
             if (!Directory.Exists(objectDir))
                 return null;
-            
+
             var contentFile = Path.Join(objectDir, "content");
             var metadataFile = Path.Join(objectDir, "metadata");
 
@@ -68,10 +68,10 @@ namespace FakeS3
 
             var creationTime = File.GetCreationTimeUtc(contentFile);
             var modifiedTime = File.GetLastWriteTimeUtc(contentFile);
-            
+
             // TODO rate limit?
             return new Object(objectName, new RateLimitedFile(contentFile, int.MaxValue),
-                metadata with {Created = creationTime, Modified = modifiedTime});
+                metadata with { Created = creationTime, Modified = modifiedTime });
         }
 
         /// <inheritdoc />
@@ -84,7 +84,11 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public async Task<IObject> CopyObjectAsync(string sourceBucketName, string sourceObjectName, string destBucketName, string destObjectName)
+        public async Task<IObject> CopyObjectAsync(
+            string sourceBucketName,
+            string sourceObjectName,
+            string destBucketName,
+            string destObjectName)
         {
             var srcDir = Path.Join(_root, sourceBucketName, sourceObjectName);
             var destDir = Path.Join(_root, destBucketName, destObjectName);
@@ -103,7 +107,7 @@ namespace FakeS3
                 File.Copy(srcMetadataFile, destMetadataFile);
                 File.Copy(srcContentFile, destContentFile);
             }
-            
+
             // TODO: metadata directive
 
             try
@@ -123,7 +127,11 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public async Task<IObject> StoreObjectAsync(IBucket bucket, string objectName, ReadOnlyMemory<byte> data, ObjectMetadata metadata)
+        public async Task<IObject> StoreObjectAsync(
+            IBucket bucket,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata)
         {
             var dirname = Path.Join(_root, bucket.Name, objectName);
 
@@ -144,7 +152,11 @@ namespace FakeS3
         }
 
         /// <inheritdoc />
-        public Task<IObject> StoreObjectAsync(string bucketName, string objectName, ReadOnlyMemory<byte> data, ObjectMetadata metadata)
+        public Task<IObject> StoreObjectAsync(
+            string bucketName,
+            string objectName,
+            ReadOnlyMemory<byte> data,
+            ObjectMetadata metadata)
         {
             if (!_bucketsMap.TryGetValue(bucketName, out var bucket))
                 throw new ArgumentException("A bucket with that name does not exist", nameof(bucketName));
@@ -165,7 +177,7 @@ namespace FakeS3
 
                     bucket.Remove(obj);
                     Directory.Delete(dirName, true);
-                    yield return dirName;
+                    yield return dirName; // todo(ashley) this is supposed to be object name?
                 }
             }
 
@@ -192,6 +204,7 @@ namespace FakeS3
             var uploadPath = Path.Join(_root, bucket.Name);
             var basePath = Path.Join(uploadPath, $"{uploadId}_{objectName}");
 
+            // todo(ashley): do this on a temporary file stream instead of a memory stream
             var completeFile = new MemoryStream();
             var partPaths = new List<string>();
 
@@ -199,11 +212,11 @@ namespace FakeS3
             {
                 var partPath = $"{basePath}_part{number}";
                 var contentPath = Path.Join(partPath, "content");
-                
+
                 await using var contentStream = File.OpenRead(contentPath);
                 var chunk = new byte[contentStream.Length];
                 await contentStream.ReadAsync(chunk);
-                
+
                 using var md5Hasher = MD5.Create();
                 var contentHash = md5Hasher.ComputeHash(chunk).ToHexString();
 
@@ -215,7 +228,7 @@ namespace FakeS3
             }
 
             var realObject = await StoreObjectAsync(bucket, objectName, completeFile.ToArray(), metadata);
-            
+
             // clean up parts
             foreach (var path in partPaths)
                 Directory.Delete(path);
