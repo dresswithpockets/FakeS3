@@ -265,10 +265,9 @@ namespace FakeS3.Internal
             {
                 Headers =
                 {
-                    { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" }
                 },
-                Content = new StringContent("")
+                Content = new StringContent("", Encoding.UTF8, "text/xml")
             };
         }
 
@@ -278,8 +277,7 @@ namespace FakeS3.Internal
             var result = XmlAdapter.Buckets(buckets.ToArray());
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Headers = { { "Content-Type", "application/xml" } },
-                Content = new StringContent(result)
+                Content = new StringContent(result, Encoding.UTF8, "application/xml")
             });
         }
 
@@ -291,8 +289,7 @@ namespace FakeS3.Internal
             if (bucket == null)
                 return new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    Headers = {{"Content-Type", "application/xml"}},
-                    Content = new StringContent(XmlAdapter.ErrorNoSuchBucket(fakeRequest.Bucket))
+                    Content = new StringContent(XmlAdapter.ErrorNoSuchBucket(fakeRequest.Bucket), Encoding.UTF8, "application/xml")
                 };
             
             var maxKeysStr = fakeRequest.Query["max-keys"];
@@ -306,8 +303,7 @@ namespace FakeS3.Internal
             var result = XmlAdapter.BucketQuery(bucketQuery);
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Headers = { { "Content-Type", "application/xml" } },
-                Content = new StringContent("")
+                Content = new StringContent(result, Encoding.UTF8, "application/xml")
             };
         }
 
