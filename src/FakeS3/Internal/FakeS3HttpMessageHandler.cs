@@ -99,12 +99,14 @@ namespace FakeS3.Internal
             {
                 Headers =
                 {
-                    { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" },
                     { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
                     { "Access-Control-Expose-Headers", "ETag" },
                 },
                 Content = new StringContent(XmlAdapter.CopyObjectResult(realObject))
+                {
+                    Headers = { { "Content-Type", "text/xml" } }
+                }
             };
         }
 
@@ -129,12 +131,14 @@ namespace FakeS3.Internal
                 {
                     Headers =
                     {
-                        { "Content-Type", "text/xml" },
                         { "Access-Control-Allow-Origin", "*" },
                         { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
                         { "Access-Control-Expose-Headers", "ETag" },
                     },
-                    Content = new StringContent(result),
+                    Content = new StringContent(result)
+                    {
+                        Headers = { { "Content-Type", "text/xml" } }
+                    },
                 };
             }
             
@@ -158,16 +162,18 @@ namespace FakeS3.Internal
                 {
                     Headers =
                     {
-                        { "Content-Type", "text/xml" },
                         { "Access-Control-Allow-Origin", "*" },
                         { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
                         { "Access-Control-Expose-Headers", "ETag" },
                     },
-                    Content = new StringContent(result),
+                    Content = new StringContent(result)
+                    {
+                        Headers = { { "Content-Type", "text/xml" } }
+                    },
                 };
             }
 
-            if (fakeRequest.HttpRequest.Headers.TryGetValues("Content-Type", out var values) &&
+            if (fakeRequest.HttpRequest.Content.Headers.TryGetValues("Content-Type", out var values) &&
                 Regex.IsMatch(values.First(), @"^multipart\/form-data; boundary=(.+)"))
             {
                 Debug.Assert(fakeRequest.HttpRequest.Content != null);
@@ -196,7 +202,6 @@ namespace FakeS3.Internal
                 {
                     Headers =
                     {
-                        { "Content-Type", "text/xml" },
                         { "Access-Control-Allow-Origin", "*" },
                         { "Access-Control-Allow-Headers", "Accept, Content-Type, Authorization, Content-Length, ETag, X-CSRF-Token, Content-Disposition" },
                         { "Access-Control-Expose-Headers", "ETag" },
@@ -220,7 +225,10 @@ namespace FakeS3.Internal
                                 new XElement("Key", key),
                                 new XElement("ETag", $"\"{realObject.Metadata.Md5}\"")
                                 )
-                            ).ToString());
+                            ).ToString())
+                    {
+                        Headers = { { "Content-Type", "text/xml" } }
+                    };
                     
                     return response;
                 }
@@ -352,10 +360,12 @@ namespace FakeS3.Internal
             {
                 Headers =
                 {
-                    { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" }
                 },
                 Content = new StringContent(result)
+                {
+                    Headers = { { "Content-Type", "text/xml" } }
+                },
             };
         }
 
@@ -370,10 +380,12 @@ namespace FakeS3.Internal
                 {
                     Headers =
                     {
-                        { "Content-Type", "application/xml" },
                         { "Access-Control-Allow-Origin", "*" }
                     },
                     Content = new StringContent(XmlAdapter.ErrorNoSuchBucket(fakeRequest.Bucket))
+                    {
+                        Headers = { { "Content-Type", "application/xml" } }
+                    },
                 };
             }
             
@@ -386,10 +398,12 @@ namespace FakeS3.Internal
                 {
                     Headers =
                     {
-                        { "Content-Type", "application/xml" },
                         { "Access-Control-Allow-Origin", "*" }
                     },
                     Content = new StringContent(XmlAdapter.ErrorNoSuchKey(fakeRequest.Object))
+                    {
+                        Headers = { { "Content-Type", "application/xml" } }
+                    },
                 };
             }
 
@@ -461,8 +475,10 @@ namespace FakeS3.Internal
         {
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Headers = { { "Content-Type", "application/xml" } },
                 Content = new StringContent(XmlAdapter.Acl())
+                {
+                    Headers = { { "Content-Type", "application/xml" } }
+                },
             });
         }
 
@@ -472,10 +488,12 @@ namespace FakeS3.Internal
             {
                 Headers =
                 {
-                    { "Content-Type", "text/xml" },
                     { "Access-Control-Allow-Origin", "*" }
                 },
                 Content = new StringContent("")
+                {
+                    Headers = { { "Content-Type", "text/xml" } }
+                },
             });
         }
 
