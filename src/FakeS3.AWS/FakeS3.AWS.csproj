@@ -3,7 +3,7 @@
     <PropertyGroup>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <AssemblyVersion>0.1.0</AssemblyVersion>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
